@@ -23,6 +23,7 @@ namespace Gear_Builder_VKR
 
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
             Operating_condition operating_Condition = new Operating_condition();
