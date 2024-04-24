@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.ComboBox;
 using Kompas6API5;
 using Kompas6Constants;
 using Kompas6Constants3D;
@@ -10,6 +11,8 @@ using KAPITypes;
 using KompasAPI7;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Gear_Builder_VKR
 {
@@ -17,16 +20,63 @@ namespace Gear_Builder_VKR
     {
 
         double nn, n1, n2, m, u, z1, z2, t,t_fin, a, af, La, da1,da2, d1,d2;
+        private System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
+        private void ChoiseType_DropDown(object sender, EventArgs e)
+        {
+            System.Windows.Forms.ComboBox comboBox = sender as System.Windows.Forms.ComboBox;
+            if (ChoiseType != null)
+            {
+                for (int i = 0; i < ChoiseType.Items.Count; i++)
+                {
+                    string itemText = ChoiseType.GetItemText(ChoiseType.Items[i]);
+                    // Установка текста в Tooltip
+                    if (itemText.Length > 50)
+                    {
+                        itemText = itemText.Substring(0, 50) + "...";
+                    }
+                    toolTip.SetToolTip(ChoiseType, itemText);
+                }
+            }
+        }
+
+                    private void ChoiseType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            System.Windows.Forms.TextBox[] textBoxes = { power, frequency1, frequency2, gearratio, torgue, linksnumber1, linksnumber2, step };
+            switch (ChoiseType.SelectedIndex) 
+                {
+                case 0:
+                    foreach (var textBox in textBoxes)
+                    {
+                        textBox.Enabled = false;
+                    }
+                    break;
+                case 1:
+                    power.Enabled = true;
+                    frequency1.Enabled = true;
+                    frequency2.Enabled = true;
+                    break;
+                case 2:
+                    power.Enabled = true;
+                    frequency1.Enabled = true;
+                    gearratio.Enabled = true;
+                    torgue.Enabled = true;
+                    break;
+                default:
+                    break;
+                }
+        }
 
         private void button4_Click(object sender, EventArgs e)
         {
 
         }
 
+      
         private void button2_Click(object sender, EventArgs e)
         {
             Operating_condition operating_Condition = new Operating_condition();
-            operating_Condition.Show();
+            operating_Condition.ShowDialog();
+            
         }
 
         double ke = 1.79;
@@ -51,7 +101,18 @@ namespace Gear_Builder_VKR
             InitializeComponent();
             ChoiseType.SelectedIndex = 0;
 
-            
+
+            System.Windows.Forms.TextBox[] textBoxes = { power, frequency1, frequency2, gearratio, torgue, linksnumber1, linksnumber2, step };
+
+            foreach (var textBox in textBoxes)
+            {
+                textBox.Enabled = false;
+            }
+
+
+
+
+
 
             try
             {
@@ -146,23 +207,13 @@ namespace Gear_Builder_VKR
             button4.Visible= true;
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-        
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button3_Click_1(object sender, EventArgs e)
         {
+            if (ChoiseType.SelectedIndex==0)
+            {
+                MessageBox.Show("Выберите тип расчета", " Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             CultureInfo ci = new CultureInfo("ru-RU");
             double[] chainstep = { 8.0, 9.525, 12.7, 15.875, 19.05, 25.4, 31.75, 38.1, 44.45, 50.8, 63.5 };
 

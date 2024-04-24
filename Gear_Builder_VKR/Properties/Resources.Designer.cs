@@ -63,6 +63,16 @@ namespace Gear_Builder_VKR.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Фото_цепи {
+            get {
+                object obj = ResourceManager.GetObject("Фото цепи", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Цепь {
             get {
                 object obj = ResourceManager.GetObject("Цепь", resourceCulture);
