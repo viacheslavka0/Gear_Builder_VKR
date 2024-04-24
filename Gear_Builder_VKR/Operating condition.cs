@@ -15,6 +15,7 @@ namespace Gear_Builder_VKR
         public Operating_condition()
         {
             InitializeComponent();
+
             Oiling.SelectedIndex = 0;
             Material.SelectedIndex = 0;
             Conditions.SelectedIndex = 0;
