@@ -36,6 +36,21 @@
     <Reference Include="KAPITypes">
       <HintPath>..\..\..\..\Desktop\Цепь ПР 19,05\KAPITypes.dll</HintPath>
     </Reference>
+    <Reference Include="KGAXLib, Version=1.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\Desktop\KGAXLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Kompas6API2D5COM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\Desktop\Kompas6API2D5COM.dll</HintPath>
+    </Reference>
+    <Reference Include="Kompas6API3D5COM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\Desktop\Kompas6API3D5COM.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +64,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculateStory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CalculateStory.Designer.cs">
+      <DependentUpon>CalculateStory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChainDriveCalculation.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CalculateStory.resx">
+      <DependentUpon>CalculateStory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

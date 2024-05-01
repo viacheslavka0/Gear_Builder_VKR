@@ -97,7 +97,7 @@
             // 
             this.Conditions.FormattingEnabled = true;
             this.Conditions.Items.AddRange(new object[] {
-            "Надо подумать"});
+            "Нормальные условия"});
             this.Conditions.Location = new System.Drawing.Point(59, 215);
             this.Conditions.Name = "Conditions";
             this.Conditions.Size = new System.Drawing.Size(332, 21);

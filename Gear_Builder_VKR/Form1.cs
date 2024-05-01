@@ -16,11 +16,22 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Gear_Builder_VKR
 {
+    
     public partial class Form1 : Form
     {
 
         double nn, n1, n2, m, u, z1, z2, t,t_fin, a, af, La, da1,da2, d1,d2;
+        double[] chainstep = { 8.0, 9.525, 12.7, 15.875, 19.05, 25.4, 31.75, 38.1, 44.45, 50.8, 63.5 };
+        ModelRebuilder modelRebuilder = new ModelRebuilder();
+
+
         private System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void ChoiseType_DropDown(object sender, EventArgs e)
         {
             System.Windows.Forms.ComboBox comboBox = sender as System.Windows.Forms.ComboBox;
@@ -39,7 +50,7 @@ namespace Gear_Builder_VKR
             }
         }
 
-                    private void ChoiseType_SelectedIndexChanged(object sender, EventArgs e)
+        private void ChoiseType_SelectedIndexChanged(object sender, EventArgs e)
         {
             System.Windows.Forms.TextBox[] textBoxes = { power, frequency1, frequency2, gearratio, torgue, linksnumber1, linksnumber2, step };
             switch (ChoiseType.SelectedIndex) 
@@ -54,12 +65,28 @@ namespace Gear_Builder_VKR
                     power.Enabled = true;
                     frequency1.Enabled = true;
                     frequency2.Enabled = true;
+                    gearratio.Enabled = false;
+                    torgue.Enabled = false;
+                    linksnumber1.Enabled = false;
+                    linksnumber2.Enabled = false;
                     break;
                 case 2:
                     power.Enabled = true;
                     frequency1.Enabled = true;
+                    frequency2.Enabled = false;
                     gearratio.Enabled = true;
                     torgue.Enabled = true;
+                    linksnumber1.Enabled = false;
+                    linksnumber2.Enabled = false;
+                    break;
+                case 3:
+                    power.Enabled = true;
+                    frequency1.Enabled = true;
+                    frequency2.Enabled = true;
+                    gearratio.Enabled = true;
+                    torgue.Enabled = true;
+                    linksnumber1.Enabled = true;
+                    linksnumber2.Enabled = true;
                     break;
                 default:
                     break;
@@ -68,7 +95,8 @@ namespace Gear_Builder_VKR
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            CalculateStory calculateStory = new CalculateStory();
+            calculateStory.Show();
         }
 
       
@@ -88,9 +116,6 @@ namespace Gear_Builder_VKR
         ksVariableCollection varcoll;
         ksPart kPart;
 
-        
-
-
         private void label14_Click(object sender, EventArgs e)
         {
 
@@ -108,11 +133,6 @@ namespace Gear_Builder_VKR
             {
                 textBox.Enabled = false;
             }
-
-
-
-
-
 
             try
             {
@@ -152,62 +172,15 @@ namespace Gear_Builder_VKR
                 MessageBox.Show($"Неизвестная ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-
-           
-
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void build_btn_click(object sender, EventArgs e)
         {
-            kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5"); // Подключаемся к нашей детали
-    
-            kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D(); // Получаем интерфейс активной 3Д детали
-            kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part); // Получаем интерфейс ксПарт, используя константы и т.д.
-            varcoll = kPart.VariableCollection(); // Получаем массив переменных, которые есть в детали
-            varcoll.refresh(); // Обновляем массив этот массив
-
-
-
-            ksVariable NN = varcoll.GetByName("NN", true, true);
-            ksVariable N1 = varcoll.GetByName("n1", true, true);
-            ksVariable N2 = varcoll.GetByName("n2", true, true);
-            ksVariable M = varcoll.GetByName("M", true, true);
-            ksVariable U = varcoll.GetByName("U", true, true);
-            ksVariable Z1 = varcoll.GetByName("z1", true, true);
-            ksVariable Z2 = varcoll.GetByName("z2", true, true);
-            ksVariable T = varcoll.GetByName("t", true, true);
-            ksVariable A_F = varcoll.GetByName("A_F", true, true);
-            ksVariable A = varcoll.GetByName("A", true, true);
-            ksVariable D1 = varcoll.GetByName("d1", true, true);
-            ksVariable D2 = varcoll.GetByName("d2", true, true);
-            ksVariable L = varcoll.GetByName("L", true, true);
-            ksVariable DA1 = varcoll.GetByName("da1", true, true);
-            ksVariable DA2 = varcoll.GetByName("da2", true, true);
-
-            NN.value = nn;
-            N1.value = n1;
-            N2.value = n2;
-            M.value = m;
-            U.value = u;
-            Z1.value = z1;
-            Z2.value = z2;
-            T.value = t_fin;
-            A_F.value = af;
-            A.value = a;
-            D1.value = d1;
-            D2.value = d2;
-            L.value = La;
-            DA1.value = da1;
-            DA2.value = da2;
-
-
-            varcoll.refresh(); // Обновляем массив этот массив
-            kPart.RebuildModel();
-
-            button4.Visible= true;
+            modelRebuilder.RebuildModel(GlobalData.Calculations[GlobalData.Calculations.Count-1]); 
+     
         }
 
-        private void button3_Click_1(object sender, EventArgs e)
+        private void calculate_btn_click(object sender, EventArgs e)
         {
             if (ChoiseType.SelectedIndex==0)
             {
@@ -215,7 +188,6 @@ namespace Gear_Builder_VKR
                 return;
             }
             CultureInfo ci = new CultureInfo("ru-RU");
-            double[] chainstep = { 8.0, 9.525, 12.7, 15.875, 19.05, 25.4, 31.75, 38.1, 44.45, 50.8, 63.5 };
 
             nn = !string.IsNullOrWhiteSpace(power.Text) ? Convert.ToDouble(power.Text.Replace('.', ','), ci) : 0.0;
             n1 = !string.IsNullOrWhiteSpace(frequency1.Text) ? Convert.ToDouble(frequency1.Text.Replace('.', ','), ci) : 0.0;
@@ -227,7 +199,7 @@ namespace Gear_Builder_VKR
 
             
 
-            if (nn> 0.0 && n1>0.0)
+            if (nn> 0.0 && n1>0.0 )
             {
                 m = Math.Round(9550 * (nn / n1),2);
                 u = Math.Round(n1 / n2,2);
@@ -257,7 +229,7 @@ namespace Gear_Builder_VKR
                         else
                         {
                             t_fin = pitch;
-                            break; // Так как предполагается, что массив отсортирован, мы можем остановиться, как только найдем первое большее значение
+                            break; 
                         }
                     }
                     
@@ -284,14 +256,15 @@ namespace Gear_Builder_VKR
                     La--;
                 }
 
-                af = (t_fin / 4) * (La - ((z1 + z2) / 2) + (Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2)))));
-                
-
-                
+                af = t_fin / 4 * (La - ((z1 + z2) / 2) + Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) 
+                - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2))));
 
                 a_label.Text= $"a: {Math.Round(a, 2)}";
                 L_label.Text= $"L: {Math.Round(La, 2)}";
                 af_label.Text = $"af: {Math.Round(af,2)}";
+
+                GlobalData.Calculations.Add(new ChainDriveCalculation {Nn=nn, N1= n1, N2 = n2, M = m, U=u,Z1=z1 , Z2=z2,T=t,TFin=t_fin,A=a,Af=af,La=La,Da1=da1, Da2=da2,D1=d1,D2=d2 });
+                
             }
 
         }

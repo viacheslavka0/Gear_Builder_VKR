@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.build_btn = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -37,7 +37,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
+            this.calculate_button = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -82,15 +82,15 @@
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // build_btn
             // 
-            this.button1.Location = new System.Drawing.Point(559, 412);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(137, 58);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Построение";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.build_btn.Location = new System.Drawing.Point(554, 412);
+            this.build_btn.Name = "build_btn";
+            this.build_btn.Size = new System.Drawing.Size(126, 58);
+            this.build_btn.TabIndex = 0;
+            this.build_btn.Text = "Построение";
+            this.build_btn.UseVisualStyleBackColor = true;
+            this.build_btn.Click += new System.EventHandler(this.build_btn_click);
             // 
             // comboBox1
             // 
@@ -118,11 +118,11 @@
             this.tabPage1.Controls.Add(this.label15);
             this.tabPage1.Controls.Add(this.richTextBox1);
             this.tabPage1.Controls.Add(this.label10);
-            this.tabPage1.Controls.Add(this.button3);
+            this.tabPage1.Controls.Add(this.calculate_button);
             this.tabPage1.Controls.Add(this.pictureBox1);
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.build_btn);
             this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -140,16 +140,16 @@
             this.button5.TabIndex = 9;
             this.button5.Text = "Ещё...";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(702, 412);
+            this.button4.Location = new System.Drawing.Point(686, 412);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(88, 58);
             this.button4.TabIndex = 8;
-            this.button4.Text = "Отменить построение";
+            this.button4.Text = "История расчетов";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // label15
@@ -180,15 +180,15 @@
             this.label10.TabIndex = 5;
             this.label10.Text = "Цепь роликовая приводная ГОСТ 13568-97";
             // 
-            // button3
+            // calculate_button
             // 
-            this.button3.Location = new System.Drawing.Point(416, 412);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(137, 58);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Выполнить расчет";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            this.calculate_button.Location = new System.Drawing.Point(411, 412);
+            this.calculate_button.Name = "calculate_button";
+            this.calculate_button.Size = new System.Drawing.Size(137, 58);
+            this.calculate_button.TabIndex = 4;
+            this.calculate_button.Text = "Выполнить расчет";
+            this.calculate_button.UseVisualStyleBackColor = true;
+            this.calculate_button.Click += new System.EventHandler(this.calculate_btn_click);
             // 
             // pictureBox1
             // 
@@ -258,6 +258,7 @@
             // 
             // ChoiseType
             // 
+            this.ChoiseType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ChoiseType.FormattingEnabled = true;
             this.ChoiseType.Items.AddRange(new object[] {
             "Не выбрано",
@@ -267,7 +268,7 @@
             "Свой вариант"});
             this.ChoiseType.Location = new System.Drawing.Point(9, 60);
             this.ChoiseType.Name = "ChoiseType";
-            this.ChoiseType.Size = new System.Drawing.Size(340, 24);
+            this.ChoiseType.Size = new System.Drawing.Size(340, 21);
             this.ChoiseType.TabIndex = 0;
             this.ChoiseType.DropDown += new System.EventHandler(this.ChoiseType_DropDown);
             this.ChoiseType.SelectedIndexChanged += new System.EventHandler(this.ChoiseType_SelectedIndexChanged);
@@ -574,7 +575,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button build_btn;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
@@ -599,7 +600,7 @@
         private System.Windows.Forms.ComboBox ChoiseType;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button calculate_button;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox step;
         private System.Windows.Forms.Label d1_label;
