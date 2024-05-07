@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 
 namespace Gear_Builder_VKR
@@ -57,7 +58,63 @@ namespace Gear_Builder_VKR
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
             ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
             ksVariableCollection varcoll = kPart.VariableCollection();
+            
+            ksVariable a = varcoll.GetByName("t");
+            //if (a != null)
+            //{
+            //    bool result = a.SetLink("C:\\Users\\Вячеслав\\Desktop\\распаковка\\Новая библиотека\\Параметрическая цепь 19,05.a3d", "t");
+            //    MessageBox.Show("Link set successfully: " + result);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Variable not found");
+            //}
+            //varcoll.refresh();
+           
             varcoll.refresh();
+
+
+            //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
+
+            //Получаем список всех документов
+            //var documents = application.Documents;
+            //for (int i = 0; i < documents.Count; i++)
+            //{
+            //    var document = (IKompasDocument3D)documents[i];
+            //    if (document != null && document.Name.Contains("Part3"))
+            //    {
+            //        Найден нужный документ, получаем его верхнюю часть
+            //        IPart7 part = document.TopPart;
+            //        IVariableTable varTable = part.VariableTable;
+
+            //        Перебор всех переменных в таблице
+            //        for (int rowIndex = 0; rowIndex < varTable.RowsCount; rowIndex++)
+            //        {
+            //            string varName = varTable.VarName[rowIndex];
+
+            //            if (varName == "t")
+            //            {
+            //                Создание объекта IVariable7 для управления переменной
+            //                IVariable7 variable = ;
+            //                if (variable != null)
+            //                {
+            //                    Устанавливаем ссылку через метод SetLink
+            //                    bool result = variable.SetLink("C:\\Users\\Вячеслав\\Desktop\\распаковка\\Новая библиотека\\Параметрическая цепь 19,05.a3d", "t");
+            //                    if (result)
+            //                    {
+            //                        Console.WriteLine("Ссылка установлена успешно.");
+            //                    }
+            //                    else
+            //                    {
+            //                        Console.WriteLine("Не удалось установить ссылку.");
+            //                    }
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //    }
+
+
 
             SetVariable(varcoll, "NN", calculation.Nn);
             SetVariable(varcoll, "n1", calculation.N1);
@@ -67,56 +124,19 @@ namespace Gear_Builder_VKR
             SetVariable(varcoll, "z1", calculation.Z1);
             SetVariable(varcoll, "z2", calculation.Z2);
             SetVariable(varcoll, "t", calculation.TFin);
-            SetVariable(varcoll, "Af", calculation.Af);
-            SetVariable(varcoll, "A", calculation.A);
+            SetVariable(varcoll, "A", calculation.Af);
+            SetVariable(varcoll, "A_F", calculation.A);
             SetVariable(varcoll, "d1", calculation.D1);
             SetVariable(varcoll, "d2", calculation.D2);
             SetVariable(varcoll, "L", calculation.La);
             SetVariable(varcoll, "da1", calculation.Da1);
             SetVariable(varcoll, "da2", calculation.Da2);
 
-            IApplication application = (IApplication)Marshal.GetActiveObject("Kompas.Application.7");
-            IKompasDocument3D document3D = (IKompasDocument3D)application.ActiveDocument;
-            IPart7 part = document3D.TopPart;
-
-            List<IPart7> parts = new List<IPart7>();
-
-            Recursion recursion = new Recursion();
-            recursion.GetDetails(part, parts);
-
-            
-            
-            
-
+            kPart.RebuildModel();
 
         }
 
-        public class ModelUpdater
-        {
-            public void UpdateComponentParameters(List<IPart7> parts, Dictionary<string, double> parameters)
-            {
-                foreach (IPart7 part in parts)
-                {
-                    IVariableTable variableTable = part.VariableTable;
-                    int count = variableTable.RowsCount;
 
-                    for (int rowIndex = 0; rowIndex < count; rowIndex++)
-                    {
-                        string varName = variableTable.VarName[rowIndex];
-
-                        // Проверяем, содержится ли такая переменная в словаре параметров для обновления
-                        if (parameters.ContainsKey(varName))
-                        {
-                            variableTable.Cell[rowIndex, 1] = parameters[varName]; // Предполагаем, что значение переменной находится во втором столбце
-                            variableTable.ApplyVars(rowIndex); // Применяем изменения к детали
-                        }
-                    }
-
-                    
-                }
-
-            }
-        }
 
         private void SetVariable(ksVariableCollection varcoll, string name, double value)
         {
@@ -127,6 +147,49 @@ namespace Gear_Builder_VKR
             }
         }
     }
+    public class ModelUpdater
+    {
+        public void UpdateComponentParameters(Dictionary<string, double> parameters)
+        {
+            //IApplication application = (IApplication)Marshal.GetActiveObject("Kompas.Application.7");
+            //IKompasDocument3D document3D = (IKompasDocument3D)application.Doc;
+            //IPart7 part = document3D.;
 
+            //var documents = application.Documents;
+            //for (int i = 0; i < documents.Count; i++)
+            //{
+            //    MessageBox.Show("1");
+            //}
+
+
+            //List<IPart7> parts = new List<IPart7>();
+
+            //Recursion recursion = new Recursion();
+            //recursion.GetDetails(part, parts);
+
+            //foreach (IPart7 item in parts)
+            //{
+            //    IVariableTable variableTable = item.VariableTable;
+            //    int count = variableTable.RowsCount;
+            //    //MessageBox.Show("1");
+
+            //    for (int rowIndex = 0; rowIndex < count; rowIndex++)
+            //    {
+            //        string varName = variableTable.VarName[rowIndex];
+
+            //        // Проверяем, содержится ли такая переменная в словаре параметров для обновления
+            //        if (parameters.ContainsKey(varName))
+            //        {
+            //            variableTable.Cell[rowIndex, 1] = parameters[varName]; // Предполагаем, что значение переменной находится во втором столбце
+            //            variableTable.ApplyVars(rowIndex); // Применяем изменения к детали
+            //        }
+            //    }
+
+
+            //}
+
+        }
+    }
+   
 
 }

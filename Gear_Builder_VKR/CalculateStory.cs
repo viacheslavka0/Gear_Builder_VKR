@@ -21,16 +21,17 @@ namespace Gear_Builder_VKR
             InitializeComponent();
             PopulateTableLayoutPanel();
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            
         }
 
         private void PopulateTableLayoutPanel()
         {
-            tableLayoutPanel1.SuspendLayout();  // Останавливаем отрисовку
+            tableLayoutPanel1.SuspendLayout();  
 
-            // Определение заголовков столбцов
-            string[] headers = { "Передаваемая мощность", "N1", "N2", "M", "U", "Z1", "Z2", "T", "TFin", "A", "Af", "La", "Da1", "Da2", "D1", "D2" };
+            string[] headers = { "","N", "n1", "n2", "M", "U", "z1", "z2", "t_r", 
+            "t_f", "A_r", "A_f", "La", "da1", "da2", "d1", "d2" };
 
-            // Сначала очищаем все, кроме заголовков
+           
             tableLayoutPanel1.Controls.Clear();
             tableLayoutPanel1.RowStyles.Clear();
             tableLayoutPanel1.RowCount = 1;
@@ -43,12 +44,15 @@ namespace Gear_Builder_VKR
                 {
                     Text = headers[columnIndex],
                     TextAlign = ContentAlignment.MiddleCenter,
-                    Dock = DockStyle.Fill
+                    Dock = DockStyle.Fill,
+                    // Установка жирного шрифта и размера шрифта
+                    Font = new Font("Arial", 12, FontStyle.Bold), 
                 };
                 tableLayoutPanel1.Controls.Add(headerLabel, columnIndex, 0);
             }
 
             // Добавляем данные расчетов
+
             int rowIndex = 1;
             foreach (var calculation in GlobalData.Calculations)
             {
@@ -58,20 +62,48 @@ namespace Gear_Builder_VKR
             }
 
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            if (GlobalData.Calculations.Count>0)
+            {
+                label2.Visible = false;
+                tableLayoutPanel1.Location = new Point(18,60);
+            }
+            else
+            {
+                label2.Visible= true;
+            }
             tableLayoutPanel1.ResumeLayout(); // Возобновляем отрисовку
             AdjustFormSize();
         }
 
         private void AddCalculationRow(ChainDriveCalculation calculation, int rowIndex)
         {
+            Label numberLabel = new Label
+            {
+                Text = rowIndex.ToString(),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial", 12, FontStyle.Regular)
+            };
+            tableLayoutPanel1.Controls.Add(numberLabel, 0, rowIndex); // Добавляем номер строки в первый столбец
+
+            // Получаем свойства объекта через рефлексию
             PropertyInfo[] properties = calculation.GetType().GetProperties();
             for (int columnIndex = 0; columnIndex < properties.Length; columnIndex++)
             {
                 PropertyInfo propInfo = properties[columnIndex];
-                Label label = new Label { Text = propInfo.GetValue(calculation).ToString(), Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter };
+                // Создаем и настраиваем Label для каждого свойства
+                Label label = new Label
+                {
+                    Text = propInfo.GetValue(calculation)?.ToString(),
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Arial", 12, FontStyle.Regular)
+                };
                 label.Click += Label_Click;
-                label.Tag = rowIndex;  // Сохраняем индекс строки в Tag
-                tableLayoutPanel1.Controls.Add(label, columnIndex, rowIndex);
+                label.Tag = rowIndex; // Сохраняем индекс строки в Tag
+
+                // Добавляем Label в таблицу, учитывая что первый столбец занят номером строки
+                tableLayoutPanel1.Controls.Add(label, columnIndex + 1, rowIndex);
             }
         }
 
@@ -87,7 +119,6 @@ namespace Gear_Builder_VKR
         {
             foreach (Control control in tableLayoutPanel1.Controls)
             {
-                // Проверка на null перед попыткой приведения Tag к int
                 if (control.Tag != null && (int)control.Tag == rowIndex)
                 {
                     control.BackColor = Color.LightBlue;
@@ -102,22 +133,28 @@ namespace Gear_Builder_VKR
         private void AdjustFormSize()
         {
             Size tablePreferredSize = tableLayoutPanel1.GetPreferredSize(new Size(0, 0));
-            this.Width = tablePreferredSize.Width + 20;
-            this.Height = 600;
-            this.AutoScroll = true;
+            this.Width = tablePreferredSize.Width - 40;
+            this.Height = tablePreferredSize.Height + 200;
+            this.AutoScroll = false;
         }
 
         
 
         private void btnSaveSelectedRow_Click_1(object sender, EventArgs e)
         {
-            if (selectedRowIndex.HasValue && selectedRowIndex.Value > 0) // Проверяем, что строка выбрана
+            if (selectedRowIndex.HasValue && selectedRowIndex.Value > 0) // 
             {
-                ChainDriveCalculation selectedCalculation = GlobalData.Calculations[selectedRowIndex.Value - 1]; // -1 потому что первая строка - заголовки
+                ChainDriveCalculation selectedCalculation = GlobalData.Calculations[selectedRowIndex.Value - 1]; 
                 MessageBox.Show("Подождите, цепная передача перестраивается");
                 modelRebuilder.RebuildModel(selectedCalculation);
 
             }
+            else { MessageBox.Show("Выберите строку"); }
+        }
+
+        private void CalculateStory_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

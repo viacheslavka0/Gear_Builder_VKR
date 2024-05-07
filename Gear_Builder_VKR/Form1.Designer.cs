@@ -38,7 +38,6 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.calculate_button = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -74,16 +73,18 @@
             this.da1_label = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // build_btn
             // 
+            this.build_btn.Enabled = false;
             this.build_btn.Location = new System.Drawing.Point(554, 412);
             this.build_btn.Name = "build_btn";
             this.build_btn.Size = new System.Drawing.Size(126, 58);
@@ -164,8 +165,10 @@
             // 
             // richTextBox1
             // 
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBox1.Location = new System.Drawing.Point(416, 535);
             this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(358, 129);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "";
@@ -189,16 +192,6 @@
             this.calculate_button.Text = "Выполнить расчет";
             this.calculate_button.UseVisualStyleBackColor = true;
             this.calculate_button.Click += new System.EventHandler(this.calculate_btn_click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Gear_Builder_VKR.Properties.Resources.Фото_цепи;
-            this.pictureBox1.Location = new System.Drawing.Point(416, 119);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(358, 266);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
             // 
             // button2
             // 
@@ -551,6 +544,16 @@
             this.label16.TabIndex = 0;
             this.label16.Text = "Межосевое расстояние";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Gear_Builder_VKR.Properties.Resources.Фото_цепи;
+            this.pictureBox1.Location = new System.Drawing.Point(416, 119);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(358, 266);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -563,12 +566,12 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
