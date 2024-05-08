@@ -122,7 +122,7 @@
             this.Name = "FolderSelectionForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Предупреждение";
-            this.Load += new System.EventHandler(this.FolderSelectionForm_Load);
+            
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

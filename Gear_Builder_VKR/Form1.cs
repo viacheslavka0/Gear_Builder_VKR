@@ -183,23 +183,22 @@ namespace Gear_Builder_VKR
 
         private void build_btn_click(object sender, EventArgs e)
         {
-            if (folderPath == null) { 
-            using (FolderSelectionForm form = new FolderSelectionForm())
+            if (GlobalData.FolderPath == null)
             {
-                if (form.ShowDialog() == DialogResult.Retry)
+                using (FolderSelectionForm form = new FolderSelectionForm())
                 {
-                    folderPath = form.SelectedPath;
-                    
-                    // Запись месторасположения в переменную и открытие файлов
-                }
-                else
-                {
-                    MessageBox.Show("Построение отменено пользователем.");
-                    return;
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Построение отменено пользователем.");
+                        return;
+                    }
                 }
             }
-            }
-            
+
 
 
             modelRebuilder.RebuildModel(GlobalData.Calculations[GlobalData.Calculations.Count - 1]);
@@ -218,11 +217,11 @@ namespace Gear_Builder_VKR
 
         private bool ValidateInput(System.Windows.Forms.TextBox textBox, string errorMessage, bool isActive)
         {
-            
             if (isActive)
                 return true;
 
-            if (!double.TryParse(textBox.Text, out double value) || value <= 0)
+            // Использование CultureInfo.InvariantCulture для обработки чисел с точкой как десятичного разделителя
+            if (!double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double value) || value <= 0)
             {
                 MessageBox.Show(errorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -236,107 +235,85 @@ namespace Gear_Builder_VKR
             bool isFrequency1Active = !frequency1.Enabled;
             bool isFrequency2Active = !frequency2.Enabled;
             bool isGerratioActive = !gearratio.Enabled;
-            //bool isTorgueActive = !torgue.Enabled;
             bool isLinksNumber1Active = !linksnumber1.Enabled;
             bool isLinksNumber2Active = !linksnumber2.Enabled;
             bool isStepActive = !step.Enabled;
 
             if (ChoiseType.SelectedIndex == 0)
             {
-                MessageBox.Show("Выберите тип расчета", " Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Выберите тип расчета", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (!ValidateInput(power, "Передаваемая мощность не может быть отрицательной или нулевой", isPowerActive) ||
-            !ValidateInput(frequency1, "Частота вращения не может быть отрицательной или нулевой", isFrequency1Active) ||
-            !ValidateInput(frequency2, "Частота вращения не может быть отрицательной или нулевой", isFrequency2Active) ||
-            !ValidateInput(gearratio, "Передаточное число не может быть отрицательным или нулевым", isGerratioActive) ||
-            !ValidateInput(torgue, "Крутящий момент не может быть отрицательным или нулевым", true) ||
-            !ValidateInput(linksnumber1, "Число звеньев не может быть отрицательным или нулевым", isLinksNumber1Active) ||
-            !ValidateInput(linksnumber2, "Число звеньев не может быть отрицательным или нулевым", isLinksNumber2Active) ||
-            !ValidateInput(step, "Шаг цепи не может быть отрицательным или нулевым", isStepActive))
+                !ValidateInput(frequency1, "Частота вращения не может быть отрицательной или нулевой", isFrequency1Active) ||
+                !ValidateInput(frequency2, "Частота вращения не может быть отрицательной или нулевой", isFrequency2Active) ||
+                !ValidateInput(gearratio, "Передаточное число не может быть отрицательным или нулевым", isGerratioActive) ||
+                !ValidateInput(linksnumber1, "Число звеньев не может быть отрицательным или нулевым", isLinksNumber1Active) ||
+                !ValidateInput(linksnumber2, "Число звеньев не может быть отрицательным или нулевым", isLinksNumber2Active) ||
+                !ValidateInput(step, "Шаг цепи не может быть отрицательным или нулевым", isStepActive))
             {
                 return;
             }
 
             CultureInfo ci = new CultureInfo("ru-RU");
-            nn = ConvertValue(power, ci);
-            n1 = ConvertValue(frequency1, ci);
-            n2 = ConvertValue(frequency2, ci);
-            u = ConvertValue(gearratio, ci);
-            m = ConvertValue(torgue, ci);
-            z1 = ConvertValue(linksnumber1, ci);
-            z2 = ConvertValue(linksnumber2, ci);
+            double nn = ConvertValue(power, ci);
+            double n1 = ConvertValue(frequency1, ci);
+            double n2 = ConvertValue(frequency2, ci);
+            double u = ConvertValue(gearratio, ci);
+            double m = ConvertValue(torgue, ci);
+            double z1 = ConvertValue(linksnumber1, ci);
+            double z2 = ConvertValue(linksnumber2, ci);
 
-
-
-            if (nn> 0.0 && n1>0.0 )
+            if (nn > 0.0 && n1 > 0.0)
             {
-                m = Math.Round(9550 * (nn / n1),2);
-                u = Math.Round(n1 / n2,2);
+                m = Math.Round(9550 * (nn / n1), 2);
+                u = Math.Round(n1 / n2, 2);
 
                 z1 = Math.Floor(29 - 2 * u);
-                if (z1%2 == 0){
-                    z1--;
-                }
+                z1 -= z1 % 2 == 0 ? 1 : 0;
 
                 z2 = Math.Floor(z1 * u);
-                if (z2%2 == 1) {  z2--; }
+                z2 -= z2 % 2 == 1 ? 1 : 0;
 
-                linksnumber1.Text = Convert.ToString(z1);
-                linksnumber2.Text = Convert.ToString(z2);
-                gearratio.Text = Convert.ToString(u);
-                torgue.Text = Convert.ToString(m);
-
-                t= 28 * Math.Pow(m * ke / (Math.Abs(z1) * p0 ), 1.0 / 3.0);
-
-                    t_fin = chainstep[0];
-                    foreach (double pitch in chainstep)
-                    {
-                        if (t >= pitch)
-                        {
-                            t_fin = pitch;
-                        }
-                        else
-                        {
-                            t_fin = pitch;
-                            break; 
-                        }
-                    }
-                    
-                    step.Text=Convert.ToString(t_fin);
-
-                d1 = t_fin / Math.Sin(deg * 180 / z1);
-                d2 = t_fin / Math.Sin(deg * 180 / z2);
-
-                d1_label.Text = $"d1: {Math.Round(d1, 2)}";
-                d2_label.Text = $"d2: {Math.Round(d2, 2)}";
-
-                da1 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z1));
-                da2 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z2));
-
-                da1_label.Text= $"da1: {Math.Round(da1,2)}";
-                da2_label.Text= $"da2: {Math.Round(da2,2)}";
-
-                a = 40 + (da1 + da2) / 2;
-                La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
-                La = Math.Round(La);
-
-                if (La % 2 == 1)
+                double t = 28 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
+                double t_fin = chainstep[0];
+                foreach (double pitch in chainstep)
                 {
-                    La--;
+                    if (t >= pitch) t_fin = pitch;
+                    else break;
                 }
 
-                af = t_fin / 4 * (La - ((z1 + z2) / 2) + Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) 
-                - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2))));
+                double d1 = t_fin / Math.Sin(deg * 180 / z1);
+                double d2 = t_fin / Math.Sin(deg * 180 / z2);
+                double da1 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z1));
+                double da2 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z2));
+                double a = 40 + (da1 + da2) / 2;
+                double La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
+                La = Math.Round(La);
+                La -= La % 2 == 1 ? 1 : 0;
 
-                a_label.Text= $"a: {Math.Round(a, 2)}";
-                L_label.Text= $"L: {Math.Round(La, 2)}";
-                af_label.Text = $"af: {Math.Round(af,2)}";
+                double af = t_fin / 4 * (La - ((z1 + z2) / 2) + Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2))));
 
-                GlobalData.Calculations.Add(new ChainDriveCalculation 
-                {Nn=nn, N1= n1, N2 = n2, M = m, U=u,Z1=z1, Z2=z2,
-                T=t,TFin=t_fin,A=a,Af=af,La=La,Da1=da1,Da2=da2,D1=d1,D2=d2 });
+                GlobalData.Calculations.Add(new ChainDriveCalculation
+                {
+                    Nn = Math.Round(nn, 2),
+                    N1 = Math.Round(n1, 2),
+                    N2 = Math.Round(n2, 2),
+                    M = m,
+                    U = u,
+                    Z1 = z1,
+                    Z2 = z2,
+                    T = Math.Round(t, 2),
+                    TFin = t_fin,
+                    A = Math.Round(a, 2),
+                    Af = Math.Round(af, 2),
+                    La = La,
+                    Da1 = Math.Round(da1, 2),
+                    Da2 = Math.Round(da2, 2),
+                    D1 = Math.Round(d1, 2),
+                    D2 = Math.Round(d2, 2)
+                });
 
                 build_btn.Enabled = true;
 
@@ -344,9 +321,7 @@ namespace Gear_Builder_VKR
                 string timeString = now.ToString("HH:mm:ss");
                 richTextBox1.Text += $"{timeString} :Расчет №{number} выполнен \n";
                 number++;
-                
             }
-
         }
     }
 }

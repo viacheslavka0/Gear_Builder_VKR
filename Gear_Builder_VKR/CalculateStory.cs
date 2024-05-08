@@ -24,16 +24,48 @@ namespace Gear_Builder_VKR
             
         }
 
-        private void PopulateTableLayoutPanel()
+        private void AdjustColumnWidths()
         {
-            tableLayoutPanel1.SuspendLayout();  
+            int[] maxWidths = new int[headers.Length];
 
-            string[] headers = { "","N", "n1", "n2", "M", "U", "z1", "z2", "t_r", 
+            // Инициализация массива максимальной ширины
+            for (int i = 0; i < headers.Length; i++)
+            {
+                maxWidths[i] = TextRenderer.MeasureText(headers[i], new Font("Arial", 12, FontStyle.Bold)).Width;
+            }
+
+            // Расчет максимальной ширины на основе данных
+            foreach (var calculation in GlobalData.Calculations)
+            {
+                PropertyInfo[] properties = calculation.GetType().GetProperties();
+                for (int i = 0; i < 16; i++)
+                {
+                    string text = properties[i].GetValue(calculation)?.ToString();
+                    int textWidth = TextRenderer.MeasureText(text, new Font("Arial", 12)).Width;
+                    if (textWidth > maxWidths[i])
+                    {
+                        maxWidths[i] = textWidth;
+                    }
+                }
+            }
+
+            // Установка ширины столбцов
+            tableLayoutPanel1.ColumnStyles.Clear();
+            for (int i = 0; i < headers.Length; i++)
+            {
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, maxWidths[i] + 10)); // Добавляем небольшой отступ
+            }
+        }
+
+        public string[] headers = { "","N", "n1", "n2", "M", "U", "z1", "z2", "t_r",
             "t_f", "A_r", "A_f", "La", "da1", "da2", "d1", "d2" };
 
-           
+        private void PopulateTableLayoutPanel()
+        {
+            tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.Controls.Clear();
             tableLayoutPanel1.RowStyles.Clear();
+            tableLayoutPanel1.ColumnStyles.Clear();
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
@@ -45,14 +77,13 @@ namespace Gear_Builder_VKR
                     Text = headers[columnIndex],
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
-                    // Установка жирного шрифта и размера шрифта
-                    Font = new Font("Arial", 12, FontStyle.Bold), 
+                    Font = new Font("Arial", 12, FontStyle.Bold),
                 };
                 tableLayoutPanel1.Controls.Add(headerLabel, columnIndex, 0);
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             }
 
             // Добавляем данные расчетов
-
             int rowIndex = 1;
             foreach (var calculation in GlobalData.Calculations)
             {
@@ -62,15 +93,9 @@ namespace Gear_Builder_VKR
             }
 
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            if (GlobalData.Calculations.Count>0)
-            {
-                label2.Visible = false;
-                tableLayoutPanel1.Location = new Point(18,60);
-            }
-            else
-            {
-                label2.Visible= true;
-            }
+            label2.Visible = GlobalData.Calculations.Count > 0 ? false : true;
+            tableLayoutPanel1.Location = new Point(18, 60);
+            
             tableLayoutPanel1.ResumeLayout(); // Возобновляем отрисовку
             AdjustFormSize();
         }
@@ -86,8 +111,14 @@ namespace Gear_Builder_VKR
             };
             tableLayoutPanel1.Controls.Add(numberLabel, 0, rowIndex); // Добавляем номер строки в первый столбец
 
+            // Список свойств для отображения в таблице
+            string[] displayedProperties = { "Nn", "N1", "N2", "M", "U", "Z1", "Z2", "T", "TFin", "A", "Af", "La", "Da1", "Da2", "D1", "D2" };
+
             // Получаем свойства объекта через рефлексию
-            PropertyInfo[] properties = calculation.GetType().GetProperties();
+            PropertyInfo[] properties = calculation.GetType().GetProperties()
+                .Where(prop => displayedProperties.Contains(prop.Name)) // Фильтруем только те свойства, которые есть в списке
+                .ToArray();
+
             for (int columnIndex = 0; columnIndex < properties.Length; columnIndex++)
             {
                 PropertyInfo propInfo = properties[columnIndex];

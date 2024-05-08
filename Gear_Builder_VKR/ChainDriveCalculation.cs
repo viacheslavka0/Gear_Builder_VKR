@@ -14,9 +14,11 @@ using System.Windows.Forms;
 
 namespace Gear_Builder_VKR
 {
+
     public static class GlobalData
     {
         public static List<ChainDriveCalculation> Calculations = new List<ChainDriveCalculation>();
+        public static string FolderPath { get; set; }
     }
     public class ChainDriveCalculation
     {
@@ -36,6 +38,15 @@ namespace Gear_Builder_VKR
         public double Da2 { get; set; }
         public double D1 { get; set; }
         public double D2 { get; set; }
+        //ниже - для геометрических характеристик частей звена
+        public double D1_ { get; set; }
+        public double B1 { get; set; }
+        public double D4_ { get; set; }
+        public double B7 { get; set; }
+        public double H1_ { get; set; }
+        public double D3_ { get; set; }
+
+
     }
     // Создайте список для хранения расчетов
     public class Recursion
@@ -52,14 +63,101 @@ namespace Gear_Builder_VKR
     }
     public class ModelRebuilder
     {
-        public void RebuildModel(ChainDriveCalculation calculation)
+        private void ProcessPart(string partName, string assemblyPath)
         {
+            
+            IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
+            
+            IDocuments documents = (IDocuments)application.Documents;
+            var document = documents.Open($"{GlobalData.FolderPath}//{partName}.m3d");
+            if (document == null)
+            {
+                MessageBox.Show($"Не удалось открыть файл: {partName}.m3d", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
             ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
             ksVariableCollection varcoll = kPart.VariableCollection();
-            
+
             ksVariable a = varcoll.GetByName("t");
+            if (a != null)
+            {
+                bool result = a.SetLink(assemblyPath, "t");
+                MessageBox.Show("Link set successfully: " + result);
+                varcoll.refresh();
+            }
+            else
+            {
+                MessageBox.Show("Variable not found");
+            }
+            varcoll.refresh();
+        }
+        private bool isFirstClick = true; 
+        public void RebuildModel(ChainDriveCalculation calculation)
+        {
+        
+        string assemblyPath = $"{GlobalData.FolderPath}\\Параметрическая цепь 19,05.a3d";
+          if (isFirstClick)
+            {
+                ProcessPart("Стяжка", assemblyPath);
+                ProcessPart("Part3", assemblyPath);
+                isFirstClick = false;
+            }
+            
+
+
+            try
+            {
+                IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
+                IDocuments documents = (IDocuments)application.Documents;
+                var document = documents.Open(assemblyPath);
+                if (document == null)
+                {
+                    throw new InvalidOperationException("Не удалось открыть документ сборки.");
+                }
+
+                KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+                ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
+                ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
+                ksVariableCollection varcoll = kPart.VariableCollection();
+
+                SetVariable(varcoll, "NN", calculation.Nn);
+                SetVariable(varcoll, "n1", calculation.N1);
+                SetVariable(varcoll, "n2", calculation.N2);
+                SetVariable(varcoll, "M", calculation.M);
+                SetVariable(varcoll, "U", calculation.U);
+                SetVariable(varcoll, "z1", calculation.Z1);
+                SetVariable(varcoll, "z2", calculation.Z2);
+                SetVariable(varcoll, "t", calculation.TFin);
+                SetVariable(varcoll, "A", calculation.Af);
+                SetVariable(varcoll, "A_F", calculation.A);
+                SetVariable(varcoll, "d1", calculation.D1);
+                SetVariable(varcoll, "d2", calculation.D2);
+                SetVariable(varcoll, "L", calculation.La);
+                SetVariable(varcoll, "da1", calculation.Da1);
+                SetVariable(varcoll, "da2", calculation.Da2);
+
+                
+
+                kPart.RebuildModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии файла сборки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SelectFolderAndRetry();
+            }
+
+
+           //kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+
+           
+           //kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
+           //kompas = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
+           //kompas = kPart.VariableCollection();
+            
+           // ksVariable a = varcoll.GetByName("t");
             //if (a != null)
             //{
             //    bool result = a.SetLink("C:\\Users\\Вячеслав\\Desktop\\распаковка\\Новая библиотека\\Параметрическая цепь 19,05.a3d", "t");
@@ -71,7 +169,7 @@ namespace Gear_Builder_VKR
             //}
             //varcoll.refresh();
            
-            varcoll.refresh();
+           //varcoll.refresh();
 
 
             //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
@@ -116,24 +214,41 @@ namespace Gear_Builder_VKR
 
 
 
-            SetVariable(varcoll, "NN", calculation.Nn);
-            SetVariable(varcoll, "n1", calculation.N1);
-            SetVariable(varcoll, "n2", calculation.N2);
-            SetVariable(varcoll, "M", calculation.M);
-            SetVariable(varcoll, "U", calculation.U);
-            SetVariable(varcoll, "z1", calculation.Z1);
-            SetVariable(varcoll, "z2", calculation.Z2);
-            SetVariable(varcoll, "t", calculation.TFin);
-            SetVariable(varcoll, "A", calculation.Af);
-            SetVariable(varcoll, "A_F", calculation.A);
-            SetVariable(varcoll, "d1", calculation.D1);
-            SetVariable(varcoll, "d2", calculation.D2);
-            SetVariable(varcoll, "L", calculation.La);
-            SetVariable(varcoll, "da1", calculation.Da1);
-            SetVariable(varcoll, "da2", calculation.Da2);
+            //SetVariable(varcoll, "NN", calculation.Nn);
+            //SetVariable(varcoll, "n1", calculation.N1);
+            //SetVariable(varcoll, "n2", calculation.N2);
+            //SetVariable(varcoll, "M", calculation.M);
+            //SetVariable(varcoll, "U", calculation.U);
+            //SetVariable(varcoll, "z1", calculation.Z1);
+            //SetVariable(varcoll, "z2", calculation.Z2);
+            //SetVariable(varcoll, "t", calculation.TFin);
+            //SetVariable(varcoll, "A", calculation.Af);
+            //SetVariable(varcoll, "A_F", calculation.A);
+            //SetVariable(varcoll, "d1", calculation.D1);
+            //SetVariable(varcoll, "d2", calculation.D2);
+            //SetVariable(varcoll, "L", calculation.La);
+            //SetVariable(varcoll, "da1", calculation.Da1);
+            //SetVariable(varcoll, "da2", calculation.Da2);
 
-            kPart.RebuildModel();
+            //kPart.RebuildModel();
 
+        }
+
+        private void SelectFolderAndRetry()
+        {
+            // Запрашиваем пользователя выбрать папку снова
+            using (FolderSelectionForm form = new FolderSelectionForm())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    GlobalData.FolderPath = form.SelectedPath;
+                    RebuildModel(GlobalData.Calculations[GlobalData.Calculations.Count-1]); // Рекурсивный вызов функции для повторной попытки
+                }
+                else
+                {
+                    MessageBox.Show("Построение отменено пользователем.");
+                }
+            }
         }
 
 
