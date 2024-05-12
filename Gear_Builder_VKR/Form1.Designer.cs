@@ -38,6 +38,7 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.calculate_button = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -60,6 +61,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.L_label = new System.Windows.Forms.Label();
             this.af_label = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -73,19 +76,18 @@
             this.da1_label = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // build_btn
             // 
             this.build_btn.Enabled = false;
-            this.build_btn.Location = new System.Drawing.Point(554, 412);
+            this.build_btn.Location = new System.Drawing.Point(554, 360);
             this.build_btn.Name = "build_btn";
             this.build_btn.Size = new System.Drawing.Size(126, 58);
             this.build_btn.TabIndex = 0;
@@ -145,7 +147,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(686, 412);
+            this.button4.Location = new System.Drawing.Point(686, 360);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(88, 58);
             this.button4.TabIndex = 8;
@@ -165,6 +167,7 @@
             // 
             // richTextBox1
             // 
+            this.richTextBox1.BackColor = System.Drawing.Color.White;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBox1.Location = new System.Drawing.Point(416, 535);
             this.richTextBox1.Name = "richTextBox1";
@@ -185,13 +188,23 @@
             // 
             // calculate_button
             // 
-            this.calculate_button.Location = new System.Drawing.Point(411, 412);
+            this.calculate_button.Location = new System.Drawing.Point(411, 360);
             this.calculate_button.Name = "calculate_button";
             this.calculate_button.Size = new System.Drawing.Size(137, 58);
             this.calculate_button.TabIndex = 4;
             this.calculate_button.Text = "Выполнить расчет";
             this.calculate_button.UseVisualStyleBackColor = true;
             this.calculate_button.Click += new System.EventHandler(this.calculate_btn_click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Gear_Builder_VKR.Properties.Resources.Фото_цепи;
+            this.pictureBox1.Location = new System.Drawing.Point(419, 68);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(358, 266);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
             // 
             // button2
             // 
@@ -251,13 +264,14 @@
             // 
             // ChoiseType
             // 
+            this.ChoiseType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ChoiseType.DropDownWidth = 400;
             this.ChoiseType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ChoiseType.FormattingEnabled = true;
             this.ChoiseType.Items.AddRange(new object[] {
             "Не выбрано",
             "По передаваемой мощности и частотам вращения",
-            "По передаваемой мощности/крутящему моменту, частоте вращения и передаточному числ" +
-                "у",
+            "По передаваемой мощности, частоте вращения и передаточному числу",
             "Свой вариант"});
             this.ChoiseType.Location = new System.Drawing.Point(9, 60);
             this.ChoiseType.Name = "ChoiseType";
@@ -402,6 +416,8 @@
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.groupBox2.Controls.Add(this.label17);
+            this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.L_label);
             this.groupBox2.Controls.Add(this.af_label);
             this.groupBox2.Controls.Add(this.label11);
@@ -416,10 +432,30 @@
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Location = new System.Drawing.Point(20, 22);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(380, 366);
+            this.groupBox2.Size = new System.Drawing.Size(380, 440);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Геометрические величины";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label17.Location = new System.Drawing.Point(301, 373);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(24, 17);
+            this.label17.TabIndex = 3;
+            this.label17.Text = "a1";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label18.Location = new System.Drawing.Point(13, 373);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(124, 17);
+            this.label18.TabIndex = 2;
+            this.label18.Text = "Угол наклона оси";
             // 
             // L_label
             // 
@@ -544,16 +580,6 @@
             this.label16.TabIndex = 0;
             this.label16.Text = "Межосевое расстояние";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Gear_Builder_VKR.Properties.Resources.Фото_цепи;
-            this.pictureBox1.Location = new System.Drawing.Point(416, 119);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(358, 266);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -563,15 +589,16 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "Form1";
             this.Text = "Проектированеи цепной передачи по ГОСТ 13568-97";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -624,6 +651,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
     }
 }
 

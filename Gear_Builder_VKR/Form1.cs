@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using System.Globalization;
 using System.Drawing;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Diagnostics;
+using stdole;
 
 namespace Gear_Builder_VKR
 {
@@ -24,18 +26,50 @@ namespace Gear_Builder_VKR
         double[] chainstep = { 8.0, 9.525, 12.7, 15.875, 19.05, 25.4, 31.75, 38.1, 44.45, 50.8, 63.5 };
         string folderPath;
         int number = 1;
+
+        
+        double p0 = 20;
+        double deg = Math.PI / 180.0;
+
+        KompasObject kompas;
+        ksDocument3D kompas_document_3D;
+        ksVariableCollection varcoll;
+        ksPart kPart;
+
         ModelRebuilder modelRebuilder = new ModelRebuilder();
         DateTime now = DateTime.Now;
 
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            conditions.K1 = 1.3;
+            conditions.K2 = 1;
+            conditions.K3 = 1.5;
+            conditions.K4 = 1;
+        }
+
         ModelUpdater modelUpdater = new ModelUpdater();
 
-
+        OperationConditions conditions = new OperationConditions();
 
         private System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
+        double currentDistance = AdditionalParameters.GlobalParameters.InitialCenterDistance;
+        double currentAngle = AdditionalParameters.GlobalParameters.InclineAngle;
+
+        AdditionalParameters additionalParameters = new AdditionalParameters();
 
         private void button5_Click(object sender, EventArgs e)
         {
-            AdditionalParameters additionalParameters = new AdditionalParameters();
+            if (additionalParameters.IsDisposed)
+            {
+                additionalParameters = new AdditionalParameters();
+            }
             additionalParameters.Show();
         }
 
@@ -100,6 +134,8 @@ namespace Gear_Builder_VKR
             }
         }
 
+        
+
         private void button4_Click(object sender, EventArgs e)
         {
             CalculateStory calculateStory = new CalculateStory();
@@ -114,14 +150,7 @@ namespace Gear_Builder_VKR
 
         }
 
-        double ke = 1.79;
-        double p0 = 20;
-        double deg = Math.PI / 180.0;
-
-        KompasObject kompas;
-        ksDocument3D kompas_document_3D;
-        ksVariableCollection varcoll;
-        ksPart kPart;
+        
 
         private void label14_Click(object sender, EventArgs e)
         {
@@ -228,9 +257,10 @@ namespace Gear_Builder_VKR
             }
             return true;
         }
-
+        bool resultFirstClick = true;
         private void calculate_btn_click(object sender, EventArgs e)
         {
+
             bool isPowerActive = !power.Enabled;
             bool isFrequency1Active = !frequency1.Enabled;
             bool isFrequency2Active = !frequency2.Enabled;
@@ -238,6 +268,9 @@ namespace Gear_Builder_VKR
             bool isLinksNumber1Active = !linksnumber1.Enabled;
             bool isLinksNumber2Active = !linksnumber2.Enabled;
             bool isStepActive = !step.Enabled;
+
+            double currentDistance = AdditionalParameters.GlobalParameters.InitialCenterDistance;
+            double currentAngle = AdditionalParameters.GlobalParameters.InclineAngle;
 
             if (ChoiseType.SelectedIndex == 0)
             {
@@ -265,6 +298,13 @@ namespace Gear_Builder_VKR
             double z1 = ConvertValue(linksnumber1, ci);
             double z2 = ConvertValue(linksnumber2, ci);
 
+            double k1 = conditions.K1;
+            double k2 = conditions.K2;
+            double k3 = conditions.K3;
+            double k4 = conditions.K4;
+
+            double ke = k1 * k2 * k3 * k4;
+           
             if (nn > 0.0 && n1 > 0.0)
             {
                 m = Math.Round(9550 * (nn / n1), 2);
@@ -278,28 +318,76 @@ namespace Gear_Builder_VKR
 
                 double t = 28 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
                 double t_fin = chainstep[0];
-                foreach (double pitch in chainstep)
+                for (int i = 0; i < chainstep.Length; i++)
                 {
-                    if (t >= pitch) t_fin = pitch;
-                    else break;
+                    if (chainstep[i] > t)
+                    {
+                        t_fin = chainstep[i];
+                        break; // Прерываем цикл, так как нашли первое значение больше t
+                    }
                 }
 
                 double d1 = t_fin / Math.Sin(deg * 180 / z1);
                 double d2 = t_fin / Math.Sin(deg * 180 / z2);
                 double da1 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z1));
                 double da2 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z2));
-                double a = 40 + (da1 + da2) / 2;
+
+                if (currentDistance>0)
+                {
+                    a =currentDistance;
+                }
+                else
+                {
+                    a = 40 + (da1 + da2) / 2;
+                }
+                double a1;
+                if(currentAngle> 0)
+                {
+                    a1=currentAngle;
+                }
+                else {a1 = 0;}
+
+
                 double La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
                 La = Math.Round(La);
                 La -= La % 2 == 1 ? 1 : 0;
 
                 double af = t_fin / 4 * (La - ((z1 + z2) / 2) + Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2))));
 
+                linksnumber1.Text = Convert.ToString(z1);
+                linksnumber2.Text = Convert.ToString(z2);
+                gearratio.Text = Convert.ToString(u);
+                torgue.Text = Convert.ToString(m);
+
+                d1_label.Text = $"d1: {Math.Round(d1, 2)}";
+                d2_label.Text = $"d2: {Math.Round(d2, 2)}";
+
+                da1_label.Text = $"da1: {Math.Round(da1, 2)}";
+                da2_label.Text = $"da2: {Math.Round(da2, 2)}";
+
+                a_label.Text= $"a: {Math.Round(a,2)}";
+                L_label.Text= $"La: {La}";
+                af_label.Text= $"Af: {Math.Round(af,2)}";
+                step.Text = Convert.ToString(t_fin);
+
+                var stepData = ChainStepData.GetChainStepData(t_fin);
+                double b1, d1_, d4_, b7, h1_, d3_, rn;
+
+                    // Присваиваем значения из stepData
+                    b1 = stepData.B1;
+                    d1_ = stepData.D1;
+                    d4_ = stepData.D4;
+                    b7 = stepData.B7;
+                    h1_ = stepData.H1;
+                    d3_ = stepData.D3;
+                    rn = stepData.Rn;
+
                 GlobalData.Calculations.Add(new ChainDriveCalculation
                 {
                     Nn = Math.Round(nn, 2),
                     N1 = Math.Round(n1, 2),
                     N2 = Math.Round(n2, 2),
+
                     M = m,
                     U = u,
                     Z1 = z1,
@@ -312,8 +400,17 @@ namespace Gear_Builder_VKR
                     Da1 = Math.Round(da1, 2),
                     Da2 = Math.Round(da2, 2),
                     D1 = Math.Round(d1, 2),
-                    D2 = Math.Round(d2, 2)
-                });
+                    D2 = Math.Round(d2, 2),
+                    A1 = a1,
+                    B1 = b1,
+                    D1_ = d1_,
+                    D4_ = d4_,
+                    B7 = b7,
+                    H1_ = h1_,
+                    D3_ = d3_,
+                    Rn = rn
+                }) ;
+                
 
                 build_btn.Enabled = true;
 
@@ -321,7 +418,59 @@ namespace Gear_Builder_VKR
                 string timeString = now.ToString("HH:mm:ss");
                 richTextBox1.Text += $"{timeString} :Расчет №{number} выполнен \n";
                 number++;
+
+                if (resultFirstClick)
+                {
+                    resultFirstClick = false;
+                    MessageBox.Show("Теперь вы можете нажать на кнопку 'Еще' и уточнить межосевое расстояние \n\n" +
+                        "При вводе вам предложат минимальное и максимальное значение","Внимание!");
+                }
             }
         }
     }
+    public class ChainStepData
+    {
+        public double T { get; set; }
+        public double B1 { get; set; }
+        public double D1 { get; set; }
+        public double D4 { get; set; }
+        public double D3 { get; set; }
+        public double H1 { get; set; }
+        public double B7 { get; set; }
+        public double Rn { get; set; }
+
+
+        public ChainStepData(double t, double b1, double d1, double d4, double d3, double h1, double b7, double rn)
+        {
+            T = t;
+            B1 = b1;
+            D1 = d1;
+            D4 = d4;
+            D3 = d3; // там везде поставил по 8, потом проверитЬ, как будет выглядеть (это d3_ на моем рисунке) 
+            H1 = h1;
+            B7 = b7;
+            Rn = rn;
+        }
+        public static List<ChainStepData> chainSteps = new List<ChainStepData>
+        {
+            new ChainStepData(8.0, 3.00, 2.31, 5.00, 4, 7, 12, 4.6),
+            new ChainStepData(9.525, 5.72, 3.28, 6.35, 5, 7, 15, 9.1),
+            new ChainStepData(12.7, 7.75, 4.45, 8.51, 8, 9, 17, 18.2),
+            new ChainStepData(15.875, 9.65, 5.08, 10.16, 8, 9, 16, 23),
+            new ChainStepData(19.05, 12.7, 5.94, 11.91, 8, 15, 24, 31.8),
+            new ChainStepData(25.4, 15.88, 7.92, 15.88, 8, 20, 28, 60),
+            new ChainStepData(31.75, 19.05, 9.53, 19.05,10 , 26, 35, 89),
+            new ChainStepData(38.1, 25.4, 11.10, 22.23, 11, 32, 48, 127),
+            new ChainStepData(44.45, 25.4, 12.7, 25.4, 14, 38, 57, 172.4),
+            new ChainStepData(50.8, 31.75, 14.27, 28.58, 16, 44, 68, 227),
+            new ChainStepData(63.5, 38.1, 19.84, 39.68, 20, 56, 80, 354),
+            // Добавьте остальные строки аналогичным образом
+        };
+
+        public static ChainStepData GetChainStepData(double tFin)
+        {
+            return chainSteps.FirstOrDefault(step => step.T == tFin);
+        }
+    }
+
 }
