@@ -27,7 +27,10 @@ namespace Gear_Builder_VKR
         string folderPath;
         int number = 1;
 
-        
+        string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//Приводная роликовая цепь";
+
+
+
         double p0 = 20;
         double deg = Math.PI / 180.0;
 
@@ -52,6 +55,8 @@ namespace Gear_Builder_VKR
             conditions.K2 = 1;
             conditions.K3 = 1.5;
             conditions.K4 = 1;
+
+            textBox1.Text = filePath;
         }
 
         ModelUpdater modelUpdater = new ModelUpdater();
@@ -59,6 +64,24 @@ namespace Gear_Builder_VKR
         OperationConditions conditions = new OperationConditions();
 
         private System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+            using (FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog())
+            {
+                folderBrowserDialog1.Description = "Выберите папку для сохранения файлов";
+                folderBrowserDialog1.ShowNewFolderButton = true;  // Опционально, позволяет создавать новую папку в диалоге
+
+                DialogResult result = folderBrowserDialog1.ShowDialog();
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog1.SelectedPath))
+                {
+                    filePath = folderBrowserDialog1.SelectedPath;
+                    textBox1.Text = folderBrowserDialog1.SelectedPath;
+                }
+            }
+        }
+
         double currentDistance = AdditionalParameters.GlobalParameters.InitialCenterDistance;
         double currentAngle = AdditionalParameters.GlobalParameters.InclineAngle;
 
@@ -170,63 +193,64 @@ namespace Gear_Builder_VKR
                 textBox.Enabled = false;
             }
 
-            try
-            {
-                kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5"); // Подключаемся к КОМПАС-3D
-                if (kompas != null)
-                {
-                    kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D(); // Получаем интерфейс активной 3D детали
-                    if (kompas_document_3D != null)
-                    {
-                        ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part); // Получаем интерфейс ksPart
-                        if (kPart != null)
-                        {
-                            varcoll = kPart.VariableCollection(); // Получаем массив переменных
-                            varcoll.refresh(); // Обновляем массив переменных
-                        }
-                        else
-                        {
-                            MessageBox.Show("Ошибка: Не удалось получить интерфейс ksPart.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ошибка: Не удалось получить активный документ 3D.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Ошибка: Не удалось подключиться к КОМПАС-3D.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (COMException ex)
-            {
-                MessageBox.Show($"Приложение КОМПАС-3D не запущено", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //try
+            //{
+            //    kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5"); // Подключаемся к КОМПАС-3D
+            //    if (kompas != null)
+            //    {
+            //        kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D(); // Получаем интерфейс активной 3D детали
+            //        if (kompas_document_3D != null)
+            //        {
+            //            ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part); // Получаем интерфейс ksPart
+            //            if (kPart != null)
+            //            {
+            //                varcoll = kPart.VariableCollection(); // Получаем массив переменных
+            //                varcoll.refresh(); // Обновляем массив переменных
+            //            }
+            //            else
+            //            {
+            //                MessageBox.Show("Ошибка: Не удалось получить интерфейс ksPart.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show("Ошибка: Не удалось получить активный документ 3D.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Ошибка: Не удалось подключиться к КОМПАС-3D.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    }
+            //}
+            //catch (COMException ex)
+            //{
+            //    MessageBox.Show($"Приложение КОМПАС-3D не запущено", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Неизвестная ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
 
         }
 
         private void build_btn_click(object sender, EventArgs e)
         {
-            if (GlobalData.FolderPath == null)
-            {
-                using (FolderSelectionForm form = new FolderSelectionForm())
-                {
-                    if (form.ShowDialog() == DialogResult.OK)
-                    {
+            //if (GlobalData.FolderPath == null)
+            //{
+            //    using (FolderSelectionForm form = new FolderSelectionForm())
+            //    {
+            //        if (form.ShowDialog() == DialogResult.OK)
+            //        {
 
-                    }
-                    else
-                    {
-                        MessageBox.Show("Построение отменено пользователем.");
-                        return;
-                    }
-                }
-            }
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show("Построение отменено пользователем.");
+            //            return;
+            //        }
+            //    }
+            //}
+
 
 
 
@@ -329,23 +353,42 @@ namespace Gear_Builder_VKR
 
                 double d1 = t_fin / Math.Sin(deg * 180 / z1);
                 double d2 = t_fin / Math.Sin(deg * 180 / z2);
-                double da1 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z1));
-                double da2 = t_fin * (0.5 + 1 / Math.Tan(deg * 180 / z2));
 
-                if (currentDistance>0)
+                var stepData = ChainStepData.GetChainStepData(t_fin);
+                double b1, d1_, d4_, b7, h1_, d3_, rn;
+
+                    // Присваиваем значения из stepData
+                    b1 = stepData.B1;
+                    d1_ = stepData.D1;
+                    d4_ = stepData.D4;
+                    b7 = stepData.B7;
+                    h1_ = stepData.H1;
+                    d3_ = stepData.D3;
+                    rn = stepData.Rn;
+
+                double delta = t_fin/d4_;
+                double K=0.5;
+                if (delta >= 1.4 || delta < 1.5) K = 0.48;
+                if (delta >= 1.5 || delta < 1.5) K = 0.532;
+                if (delta >= 1.6 || delta < 1.7) K = 0.555;
+                
+                double da1 = t_fin * (K + 1 / Math.Tan(deg * 180 / z1));
+                double da2 = t_fin * (K + 1 / Math.Tan(deg * 180 / z2));
+
+                if (currentDistance > 0)
                 {
-                    a =currentDistance;
+                    a = currentDistance;
                 }
                 else
                 {
                     a = 40 + (da1 + da2) / 2;
                 }
                 double a1;
-                if(currentAngle> 0)
+                if (currentAngle > 0)
                 {
-                    a1=currentAngle;
+                    a1 = currentAngle;
                 }
-                else {a1 = 0;}
+                else { a1 = 0; }
 
 
                 double La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
@@ -365,22 +408,31 @@ namespace Gear_Builder_VKR
                 da1_label.Text = $"da1: {Math.Round(da1, 2)}";
                 da2_label.Text = $"da2: {Math.Round(da2, 2)}";
 
-                a_label.Text= $"a: {Math.Round(a,2)}";
-                L_label.Text= $"La: {La}";
-                af_label.Text= $"Af: {Math.Round(af,2)}";
+                a_label.Text = $"a: {Math.Round(a, 2)}";
+                L_label.Text = $"La: {La}";
+                af_label.Text = $"Af: {Math.Round(af, 2)}";
                 step.Text = Convert.ToString(t_fin);
 
-                var stepData = ChainStepData.GetChainStepData(t_fin);
-                double b1, d1_, d4_, b7, h1_, d3_, rn;
-
-                    // Присваиваем значения из stepData
-                    b1 = stepData.B1;
-                    d1_ = stepData.D1;
-                    d4_ = stepData.D4;
-                    b7 = stepData.B7;
-                    h1_ = stepData.H1;
-                    d3_ = stepData.D3;
-                    rn = stepData.Rn;
+                //Расчет звездочки
+                double dn1 = t_fin * (K + 1 / Math.Tan(180.0 / z1 * (Math.PI / 180.0)));
+                double dn2 = t_fin * (K + 1 / Math.Tan(180.0 / z2 * (Math.PI / 180.0)));
+                double r = 0.5025 * d4_;
+                double dvn1 = d1 - 2 * r;
+                double dvn2 = d2 - 2 * r;
+                double alpha1 = 55 - (60 / z1);
+                double alpha2 = 55 - (60 / z2);
+                double fi1 = 360 / z1;
+                double fi2 = 360 / z2;
+                double y1 = 17-(64/z1);
+                double y2 = 17-(64/z2);
+                double beta1 = 18 - (56 /z1);
+                double beta2 = 18 - (56 /z2);
+                double r11 = 0.8 * d4_ + r;
+                double r12 = 0.8 * d4_ + r;
+                double fg1 = d4_*(1.24*Math.Sin(deg*y1)-0.8*Math.Sin(deg * beta1));
+                double fg2 = d4_*(1.24*Math.Sin(deg * y2)-0.8*Math.Sin(deg * beta2));
+                double r21 = d4_*(0.8*Math.Cos(deg * beta1)+1.24*Math.Cos(deg * y1)-1.3025)-0.05;
+                double r22 = d4_*(0.8*Math.Cos(deg * beta2)+1.24*Math.Cos(deg * y2)-1.3025)-0.05;
 
                 GlobalData.Calculations.Add(new ChainDriveCalculation
                 {
@@ -408,7 +460,27 @@ namespace Gear_Builder_VKR
                     B7 = b7,
                     H1_ = h1_,
                     D3_ = d3_,
-                    Rn = rn
+                    Rn = rn,
+
+                    Dn1 = dn1,
+                    Dn2 = dn2,
+                    R=r,
+                    Dvn1=dvn1,
+                    Dvn2=dvn2,
+                    Alpha1=alpha1,
+                    Alpha2=alpha2,
+                    Fi1=fi1,
+                    Fi2=fi2,
+                    Y1= y1,
+                    Y2= y2,
+                    Beta1=beta1,
+                    Beta2=beta2,
+                    R11=r11,
+                    R12=r12,
+                    Fg1=fg1,
+                    Fg2=fg2,
+                    R21=r21,
+                    R22=r22,
                 }) ;
                 
 

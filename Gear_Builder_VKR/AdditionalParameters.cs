@@ -21,7 +21,9 @@ namespace Gear_Builder_VKR
             this.Size = new Size(560, 320);
             textBox1.Text = GlobalParameters.InitialCenterDistance.ToString();
             textBox2.Text = GlobalParameters.InclineAngle.ToString();
-            label3.Text = "A_min = 0,6*(De1 + De2) + 30÷50мм \nA_max=80*t";
+          
+            label3.Text = "";
+            //label3.Text = "A_min = 0,6*(De1 + De2) + 30÷50мм \nA_max=80*t";
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -93,14 +95,14 @@ namespace Gear_Builder_VKR
                     }
                     else
                     {
-                        label3.Text = "Please enter a valid number.";
+                        label3.Text = "Введите корректное значение";
                         label3.ForeColor = Color.Black;
                     }
                 }
-                else { label3.Text = $"A_min = 0.6*(De1 + De2) + 30÷50mm \nA_max=80*t"; }
+                else { }
             }
             else
-            { label3.Text = $"A_min = 0.6*(De1 + De2) + 30÷50mm \nA_max=80*t"; }
+            { }
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

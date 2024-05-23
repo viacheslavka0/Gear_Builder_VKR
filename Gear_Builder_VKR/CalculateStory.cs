@@ -233,6 +233,26 @@ namespace Gear_Builder_VKR
                 writer.WriteLine("Диаметр вершины ведомой звездоки (da2) - " + selectedCalculation.Da2 + " мм");
                 writer.WriteLine("Межосевое расстояние - " + selectedCalculation.Af + " мм");
                 writer.WriteLine("Угол наклона оси - " + selectedCalculation.A1);
+                writer.WriteLine("Диаметр окружности выступов ведущей звездочки - " + selectedCalculation.Dn1);
+                writer.WriteLine("Диаметр окружности выступов ведомой звездочки - " + selectedCalculation.Dn2);
+                writer.WriteLine("Диаметр окружности впадины ведущей звездочки - " + selectedCalculation.Dvn1);
+                writer.WriteLine("Диаметр окружности впадины ведомой звездочки - " + selectedCalculation.Dvn2);
+                writer.WriteLine("Половина угла впадины ведущей зведочки (alpha) - " + selectedCalculation.Alpha1);
+                writer.WriteLine("Половина угла впадины ведомой зведочки (alpha)- " + selectedCalculation.Alpha2);
+                writer.WriteLine("Половина угла зуба (fi1) - " + selectedCalculation.Fi1);
+                writer.WriteLine("Половина угла зуба (fi2) - " + selectedCalculation.Fi2);
+                writer.WriteLine("Профильный угол зубьев (y1)- " + selectedCalculation.Y1);
+                writer.WriteLine("Профильный угол зубьев (y2)- " + selectedCalculation.Y2);
+                writer.WriteLine("Угол сопряжения (beta1)- " + selectedCalculation.Beta1);
+                writer.WriteLine("Угол сопряжения (beta2)- " + selectedCalculation.Beta2);
+                writer.WriteLine("Радиус впадины (r)- " + selectedCalculation.R);
+                writer.WriteLine("Радиус сопряжения (r1_1)- " + selectedCalculation.R11);
+                writer.WriteLine("Радиус сопряжения (r1_2)- " + selectedCalculation.R12);
+                writer.WriteLine("Радиус головки зуба (r2_1)- " + selectedCalculation.R21);
+                writer.WriteLine("Радиус головки зуба (r2_2)- " + selectedCalculation.R22);
+                writer.WriteLine("Прямой участок профиля FC(1)- " + selectedCalculation.Fg1);
+                writer.WriteLine("Прямой участок профиля FC(2)- " + selectedCalculation.Fg2);
+
 
 
                 writer.WriteLine("Угол наклона (α) - " + selectedCalculation.A1);

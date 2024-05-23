@@ -32,6 +32,9 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
@@ -110,12 +113,15 @@
             this.tabControl1.Location = new System.Drawing.Point(0, -1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(922, 722);
+            this.tabControl1.Size = new System.Drawing.Size(991, 722);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.tabPage1.Controls.Add(this.label19);
+            this.tabPage1.Controls.Add(this.textBox1);
+            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.button5);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.label15);
@@ -131,9 +137,36 @@
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tabPage1.Size = new System.Drawing.Size(914, 696);
+            this.tabPage1.Size = new System.Drawing.Size(983, 696);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Расчет и построение цепи";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label19.Location = new System.Drawing.Point(416, 461);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(218, 16);
+            this.label19.TabIndex = 12;
+            this.label19.Text = "Директория сохранения файлов";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(419, 484);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(355, 21);
+            this.textBox1.TabIndex = 11;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(780, 484);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Обзор";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button5
             // 
@@ -159,7 +192,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label15.Location = new System.Drawing.Point(416, 515);
+            this.label15.Location = new System.Drawing.Point(416, 602);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(182, 17);
             this.label15.TabIndex = 7;
@@ -169,10 +202,10 @@
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.White;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBox1.Location = new System.Drawing.Point(416, 535);
+            this.richTextBox1.Location = new System.Drawing.Point(416, 625);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(358, 129);
+            this.richTextBox1.Size = new System.Drawing.Size(358, 39);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "";
             // 
@@ -180,7 +213,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(262, 22);
+            this.label10.Location = new System.Drawing.Point(39, 14);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(512, 29);
             this.label10.TabIndex = 5;
@@ -271,8 +304,7 @@
             this.ChoiseType.Items.AddRange(new object[] {
             "Не выбрано",
             "По передаваемой мощности и частотам вращения",
-            "По передаваемой мощности, частоте вращения и передаточному числу",
-            "Свой вариант"});
+            "По передаваемой мощности, частоте вращения и передаточному числу"});
             this.ChoiseType.Location = new System.Drawing.Point(9, 60);
             this.ChoiseType.Name = "ChoiseType";
             this.ChoiseType.Size = new System.Drawing.Size(340, 21);
@@ -409,7 +441,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(914, 696);
+            this.tabPage2.Size = new System.Drawing.Size(983, 696);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Результаты расчетов";
             // 
@@ -584,7 +616,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 715);
+            this.ClientSize = new System.Drawing.Size(987, 715);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.comboBox1);
             this.Name = "Form1";
@@ -653,6 +685,9 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -50,6 +50,28 @@ namespace Gear_Builder_VKR
         public double D3_ { get; set; }
         public double Rn { get; set; }
 
+        //параметры для звездочек
+        public double Dn1 {  get; set; }
+        public double R {  get; set; }
+        public double Dvn1 { get; set; }
+        public double Alpha1 { get; set; }
+        public double Fi1 { get; set; }
+        public double Y1 { get; set; }
+        public double Beta1 { get; set; }
+        public double R11 { get; set; }
+        public double Fg1 { get; set; }
+        public double R21 { get; set; }
+        //параметры для звездочек
+        public double Dn2 { get; set; }
+        public double Dvn2 { get; set; }
+        public double Alpha2 { get; set; }
+        public double Fi2 { get; set; }
+        public double Y2 { get; set; }
+        public double Beta2 { get; set; }
+        public double R12 { get; set; }
+        public double Fg2 { get; set; }
+        public double R22 { get; set; }
+
 
     }
     // Создайте список для хранения расчетов
@@ -82,31 +104,38 @@ namespace Gear_Builder_VKR
         }
         private void ProcessPart(string partName, string assemblyPath)
         {
-            
-
-            IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
-            
-            IDocuments documents = (IDocuments)application.Documents;
-            var document = documents.Open($"{GlobalData.FolderPath}//{partName}.m3d");
-            if (document == null)
-            {
-                MessageBox.Show($"Не удалось открыть файл: {partName}.m3d", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
-            ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
+            ksDocument3D kompas_document_3D = (ksDocument3D)kompas.Document3D();
+            kompas_document_3D.Open($"{GlobalData.FolderPath}//{partName}.m3d");
+
+
+            kompas.ActiveDocument3D();
             ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
             ksVariableCollection varcoll = kPart.VariableCollection();
 
-            ksVariable t = varcoll.GetByName("t");
-            ksVariable d4_ =varcoll.GetByName("d4_");
-            ksVariable d2_ =varcoll.GetByName("d2_");
-            ksVariable d1_ =varcoll.GetByName("d1_");
-            ksVariable h1_ =varcoll.GetByName("h1_");
-            ksVariable d3_ =varcoll.GetByName("d3_");
-            ksVariable b1_ =varcoll.GetByName("b1_");
-            ksVariable b7_ =varcoll.GetByName("b7_");
+
+           
+
+            //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
+            
+            //IDocuments documents = (IDocuments)application.Documents;
+            //var document = documents.Open($"{GlobalData.FolderPath}//{partName}.m3d",false);
+            //if (document == null)
+            //{
+            //    MessageBox.Show($"Не удалось открыть файл: {partName}.m3d", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+
+            
+
+            //ksVariable t = varcoll.GetByName("t");
+            //ksVariable d4_ =varcoll.GetByName("d4_");
+            //ksVariable d2_ =varcoll.GetByName("d2_");
+            //ksVariable d1_ =varcoll.GetByName("d1_");
+            //ksVariable h1_ =varcoll.GetByName("h1_");
+            //ksVariable d3_ =varcoll.GetByName("d3_");
+            //ksVariable b1_ =varcoll.GetByName("b1_");
+            //ksVariable b7_ =varcoll.GetByName("b7_");
 
 
             SetVariableLink(varcoll.GetByName("t"), assemblyPath, "t");
@@ -118,10 +147,97 @@ namespace Gear_Builder_VKR
             SetVariableLink(varcoll.GetByName("b1_"), assemblyPath, "b1");
             SetVariableLink(varcoll.GetByName("b7_"), assemblyPath, "b7");
 
+            varcoll.refresh();
+            kPart.RebuildModel();
+            kompas_document_3D.Save();
+            kompas_document_3D.close();
+        }
 
+        private void StarBuild(string partName, string assemblyPath, ChainDriveCalculation calculation)
+        {
+            KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+            ksDocument3D kompas_document_3D = (ksDocument3D)kompas.Document3D();
+            kompas_document_3D.Open($"{GlobalData.FolderPath}//{partName}.m3d");
+            kompas.ActiveDocument3D();
+            ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
+            ksVariableCollection varcoll = kPart.VariableCollection();
+
+
+
+            if (partName=="Ведущая звездочка")
+            {
+                SetVariable(varcoll, "d_d", calculation.D1);
+                SetVariable(varcoll, "d_n", calculation.Dn1);
+                SetVariable(varcoll, "d_vp", calculation.Dvn1);
+                SetVariable(varcoll, "alpha", calculation.Alpha1);
+                SetVariable(varcoll, "fi", calculation.Fi1);
+                SetVariable(varcoll, "y", calculation.Y1);
+                SetVariable(varcoll, "beta", calculation.Beta1);
+                SetVariable(varcoll, "r1", calculation.R);
+                SetVariable(varcoll, "r2", calculation.R21);
+                SetVariable(varcoll, "fg", calculation.Fg1);
+                SetVariable(varcoll, "z1", calculation.Z1);
+            }
+            else
+            {
+                SetVariable(varcoll, "d_d", calculation.D2);
+                SetVariable(varcoll, "d_n", calculation.Dn2);
+                SetVariable(varcoll, "d_vp", calculation.Dvn2);
+                SetVariable(varcoll, "alpha", calculation.Alpha2);
+                SetVariable(varcoll, "fi", calculation.Fi2);
+                SetVariable(varcoll, "y", calculation.Y2);
+                SetVariable(varcoll, "beta", calculation.Beta2);
+                SetVariable(varcoll, "r1", calculation.R);
+                SetVariable(varcoll, "r2", calculation.R22);
+                SetVariable(varcoll, "fg", calculation.Fg2);
+                SetVariable(varcoll, "z2", calculation.Z2);
+            }
 
             varcoll.refresh();
+            kPart.RebuildModel();
+            kompas_document_3D.Save();
+            kompas_document_3D.close();
         }
+        private void GearBuild(string assemblyPath, ChainDriveCalculation calculation)
+        {
+            KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+            ksDocument3D kompas_document_3D = (ksDocument3D)kompas.Document3D();
+            kompas_document_3D.Open(assemblyPath);
+            
+            kompas.ActiveDocument3D();
+            ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
+
+            ksVariableCollection varcoll = kPart.VariableCollection();
+            
+            SetVariable(varcoll, "NN", calculation.Nn);
+            SetVariable(varcoll, "n1", calculation.N1);
+            SetVariable(varcoll, "n2", calculation.N2);
+            SetVariable(varcoll, "M", calculation.M);
+            SetVariable(varcoll, "U", calculation.U);
+            SetVariable(varcoll, "z1", calculation.Z1);
+            SetVariable(varcoll, "z2", calculation.Z2);
+            SetVariable(varcoll, "t", calculation.TFin);
+            SetVariable(varcoll, "A", calculation.Af);
+            SetVariable(varcoll, "A_F", calculation.A);
+            SetVariable(varcoll, "d1", calculation.D1);
+            SetVariable(varcoll, "d2", calculation.D2);
+            SetVariable(varcoll, "L", calculation.La);
+            SetVariable(varcoll, "da1", calculation.Da1);
+            SetVariable(varcoll, "da2", calculation.Da2);
+            SetVariable(varcoll, "a1", calculation.A1);
+
+            SetVariable(varcoll, "d1_", calculation.D1_);
+            SetVariable(varcoll, "b1", calculation.B1);
+            SetVariable(varcoll, "d4_", calculation.D4_);
+            SetVariable(varcoll, "b7", calculation.B7);
+            SetVariable(varcoll, "h1_", calculation.H1_);
+
+            varcoll.refresh();
+            kPart.RebuildModel();
+            
+        }
+
+
         public static bool isFirstClick = true; 
         public void RebuildModel(ChainDriveCalculation calculation)
         {
@@ -135,13 +251,13 @@ namespace Gear_Builder_VKR
             kompas.Visible=true;
             
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
-            if (isFirstClick) {
+            
                 while (kompas_document_3D != null)
                 {
                     kompas_document_3D.close();
                     kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
                 }
-            }
+            
             
             //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
             //IDocuments documents = (IDocuments)application.Documents;
@@ -154,50 +270,13 @@ namespace Gear_Builder_VKR
                 ProcessPart("Ось", assemblyPath);
                 isFirstClick = false;
           }
-            
+            StarBuild("Ведущая звездочка", assemblyPath, calculation);
+            StarBuild("Ведомая звездочка", assemblyPath, calculation);
+            GearBuild(assemblyPath, calculation);
+
             //try
             //{
-                kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
-                kompas_document_3D = (ksDocument3D)kompas.Document3D();
-                //application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
-                //documents = (IDocuments)application.Documents;
-
-                kompas_document_3D.Open(assemblyPath);
-                kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
-                
-                ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
-                ksVariableCollection varcoll = kPart.VariableCollection();
-            Console.WriteLine(calculation.A1);
-
-                SetVariable(varcoll, "NN", calculation.Nn);
-                SetVariable(varcoll, "n1", calculation.N1);
-                SetVariable(varcoll, "n2", calculation.N2);
-                SetVariable(varcoll, "M", calculation.M);
-                SetVariable(varcoll, "U", calculation.U);
-                SetVariable(varcoll, "z1", calculation.Z1);
-                SetVariable(varcoll, "z2", calculation.Z2);
-                SetVariable(varcoll, "t", calculation.TFin);
-                SetVariable(varcoll, "A", calculation.Af);
-                SetVariable(varcoll, "A_F", calculation.A);
-                SetVariable(varcoll, "d1", calculation.D1);
-                SetVariable(varcoll, "d2", calculation.D2);
-                SetVariable(varcoll, "L", calculation.La);
-                SetVariable(varcoll, "da1", calculation.Da1);
-                SetVariable(varcoll, "da2", calculation.Da2);
-                SetVariable(varcoll, "a1", calculation.A1);
-                
-
-                SetVariable(varcoll, "d1_", calculation.D1_);
-                SetVariable(varcoll, "b1", calculation.B1);
-                SetVariable(varcoll, "d4_", calculation.D4_);
-                SetVariable(varcoll, "b7", calculation.B7);
-                SetVariable(varcoll, "h1_", calculation.H1_);
-                SetVariable(varcoll, "d3_", calculation.D3_);
-                
-
-                
-
-                kPart.RebuildModel();
+           
             //}
             //catch (Exception ex)
             //{
@@ -205,6 +284,8 @@ namespace Gear_Builder_VKR
             //    SelectFolderAndRetry();
             //}
         }
+
+        
 
         private void SelectFolderAndRetry()
         {
