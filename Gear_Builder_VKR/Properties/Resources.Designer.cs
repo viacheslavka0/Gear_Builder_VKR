@@ -61,12 +61,82 @@ namespace Gear_Builder_VKR.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Part3 {
+            get {
+                object obj = ResourceManager.GetObject("Part3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap warning {
             get {
                 object obj = ResourceManager.GetObject("warning", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Ведомая_звездочка {
+            get {
+                object obj = ResourceManager.GetObject("Ведомая_звездочка", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Ведущая_звездочка {
+            get {
+                object obj = ResourceManager.GetObject("Ведущая_звездочка", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] ЗВездочки_дял_цепи_25_4 {
+            get {
+                object obj = ResourceManager.GetObject("ЗВездочки_дял_цепи_25_4", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Ось {
+            get {
+                object obj = ResourceManager.GetObject("Ось", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Параметрическая_цепь_19_05 {
+            get {
+                object obj = ResourceManager.GetObject("Параметрическая_цепь_19_05", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] Стяжка {
+            get {
+                object obj = ResourceManager.GetObject("Стяжка", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -87,6 +157,26 @@ namespace Gear_Builder_VKR.Properties {
             get {
                 object obj = ResourceManager.GetObject("Цепь", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] часть_для_массива {
+            get {
+                object obj = ResourceManager.GetObject("часть_для_массива", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] часть_для_массива2 {
+            get {
+                object obj = ResourceManager.GetObject("часть_для_массива2", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

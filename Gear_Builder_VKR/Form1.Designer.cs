@@ -153,6 +153,7 @@
             // 
             // textBox1
             // 
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(419, 484);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(355, 21);
@@ -304,7 +305,8 @@
             this.ChoiseType.Items.AddRange(new object[] {
             "Не выбрано",
             "По передаваемой мощности и частотам вращения",
-            "По передаваемой мощности, частоте вращения и передаточному числу"});
+            "По передаваемой мощности, частоте вращения и передаточному числу",
+            "По крутящему моменту, частоте вращения и передаточному числу"});
             this.ChoiseType.Location = new System.Drawing.Point(9, 60);
             this.ChoiseType.Name = "ChoiseType";
             this.ChoiseType.Size = new System.Drawing.Size(340, 21);
@@ -344,9 +346,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 349);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(159, 17);
+            this.label5.Size = new System.Drawing.Size(168, 17);
             this.label5.TabIndex = 2;
-            this.label5.Text = "Крутящий момент, Н*м";
+            this.label5.Text = "Крутящий момент, Н*мм";
             // 
             // linksnumber2
             // 

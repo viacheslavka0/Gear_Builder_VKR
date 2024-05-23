@@ -15,6 +15,8 @@ using System.Drawing;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Diagnostics;
 using stdole;
+using Gear_Builder_VKR.Properties;
+using System.IO;
 
 namespace Gear_Builder_VKR
 {
@@ -26,9 +28,10 @@ namespace Gear_Builder_VKR
         double[] chainstep = { 8.0, 9.525, 12.7, 15.875, 19.05, 25.4, 31.75, 38.1, 44.45, 50.8, 63.5 };
         string folderPath;
         int number = 1;
+        int calctype = 0;
 
-        string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//Приводная роликовая цепь";
-
+        public string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//Приводная роликовая цепь";
+        
 
 
         double p0 = 20;
@@ -57,6 +60,7 @@ namespace Gear_Builder_VKR
             conditions.K4 = 1;
 
             textBox1.Text = filePath;
+            GlobalData.FolderPath = folderPath;
         }
 
         ModelUpdater modelUpdater = new ModelUpdater();
@@ -78,8 +82,53 @@ namespace Gear_Builder_VKR
                 {
                     filePath = folderBrowserDialog1.SelectedPath;
                     textBox1.Text = folderBrowserDialog1.SelectedPath;
+                    GlobalData.FolderPath = folderBrowserDialog1.SelectedPath;
+                    SaveResourcesToFolder(GlobalData.FolderPath);
                 }
             }
+        }
+
+        private void SaveResourcesToFolder(string folderPath)
+        {
+            // Список ресурсов и их названий файлов
+            var resourceFiles = new Dictionary<byte[], string>
+    {
+        { Resources.Part3, "Part3.m3d" },
+        { Resources.Ведомая_звездочка, "Ведомая звездочка.m3d" },
+        { Resources.Ведущая_звездочка, "Ведущая звездочка.m3d" },
+        { Resources.Ось, "Ось.m3d" },
+        { Resources.Параметрическая_цепь_19_05, "Параметрическая цепь 19,05.a3d" },
+        { Resources.Стяжка, "Стяжка.m3d" },
+        { Resources.часть_для_массива, "часть для массива.a3d" },
+        { Resources.часть_для_массива2, "часть для массива2.a3d" }
+    };
+
+            // Сохранение каждого ресурса в указанную папку
+            foreach (var resourceFile in resourceFiles)
+            {
+                string filePath = Path.Combine(folderPath, resourceFile.Value);
+                bool fileSaved = false;
+
+                while (!fileSaved)
+                {
+                    try
+                    {
+                        File.WriteAllBytes(filePath, resourceFile.Key);
+                        fileSaved = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        DialogResult result = MessageBox.Show($"Не удалось сохранить файл {filePath}. Он может быть открыт другим приложением.\n\nОшибка: {ex.Message}\n\nПовторить попытку?", "Ошибка сохранения файла", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+
+                        if (result != DialogResult.Retry)
+                        {
+                            break; // Прервать попытки сохранения, если пользователь нажал "Отмена"
+                        }
+                    }
+                }
+            }
+
+            MessageBox.Show("Файлы сохранены в: " + folderPath);
         }
 
         double currentDistance = AdditionalParameters.GlobalParameters.InitialCenterDistance;
@@ -133,6 +182,7 @@ namespace Gear_Builder_VKR
                     torgue.Enabled = false;
                     linksnumber1.Enabled = false;
                     linksnumber2.Enabled = false;
+                    calctype = 1;
                     break;
                 case 2:
                     power.Enabled = true;
@@ -142,15 +192,17 @@ namespace Gear_Builder_VKR
                     torgue.Enabled = true;
                     linksnumber1.Enabled = false;
                     linksnumber2.Enabled = false;
+                    calctype = 2;
                     break;
                 case 3:
-                    power.Enabled = true;
+                    power.Enabled = false;
                     frequency1.Enabled = true;
-                    frequency2.Enabled = true;
+                    frequency2.Enabled = false;
                     gearratio.Enabled = true;
                     torgue.Enabled = true;
-                    linksnumber1.Enabled = true;
-                    linksnumber2.Enabled = true;
+                    linksnumber1.Enabled = false;
+                    linksnumber2.Enabled = false;
+                    calctype = 3;
                     break;
                 default:
                     break;
@@ -232,9 +284,16 @@ namespace Gear_Builder_VKR
             //}
 
         }
-
+        bool firstClick = true;
         private void build_btn_click(object sender, EventArgs e)
         {
+            if (firstClick)
+            {
+                SaveResourcesToFolder(GlobalData.FolderPath);
+                firstClick = false;
+            }
+
+
             //if (GlobalData.FolderPath == null)
             //{
             //    using (FolderSelectionForm form = new FolderSelectionForm())
@@ -284,7 +343,6 @@ namespace Gear_Builder_VKR
         bool resultFirstClick = true;
         private void calculate_btn_click(object sender, EventArgs e)
         {
-
             bool isPowerActive = !power.Enabled;
             bool isFrequency1Active = !frequency1.Enabled;
             bool isFrequency2Active = !frequency2.Enabled;
@@ -328,10 +386,47 @@ namespace Gear_Builder_VKR
             double k4 = conditions.K4;
 
             double ke = k1 * k2 * k3 * k4;
+            
+            if (calctype == 3)
+            {
+                m = Convert.ToDouble(torgue.Text);
+                
+                if (
+               !ValidateInput(frequency1, "Частота вращения не может быть отрицательной или нулевой", isFrequency1Active) ||
+               !ValidateInput(torgue, "Крутящий момент не может быть отрицательным или нулевым", isGerratioActive) ||
+               !ValidateInput(gearratio, "Передаточное число не может быть отрицательным или нулевым", isGerratioActive) 
+               )
+                {
+                    return;
+                }
+
+                z1 = Math.Floor(29 - 2 * u);
+                z1 -= z1 % 2 == 0 ? 1 : 0;
+
+                z2 = Math.Floor(z1 * u);
+                z2 -= z2 % 2 == 1 ? 1 : 0;
+                double utest = z2 / z1;
+                if (100 * Math.Abs((u - utest) / u) <= 3)
+                {
+                    u = Math.Round(utest);
+                }
+                else
+                {
+                    MessageBox.Show("Слишком большое расхождения с исходным значением передаточного отношения");
+                    return;
+                }
+                n2 = Math.Round(n1 / u);
+                frequency2.Text = Convert.ToString(n2);
+                linksnumber1.Text = Convert.ToString(z1);
+                linksnumber2.Text = Convert.ToString(z2);
+
+            }else
+            { 
+             
            
             if (nn > 0.0 && n1 > 0.0)
             {
-                m = Math.Round(9550 * (nn / n1), 2);
+                m = Math.Round(9550000 * (nn / n1), 2);
                 u = Math.Round(n1 / n2, 2);
 
                 z1 = Math.Floor(29 - 2 * u);
@@ -339,8 +434,10 @@ namespace Gear_Builder_VKR
 
                 z2 = Math.Floor(z1 * u);
                 z2 -= z2 % 2 == 1 ? 1 : 0;
+            }
+            }
 
-                double t = 28 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
+                double t = 2.8 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
                 double t_fin = chainstep[0];
                 for (int i = 0; i < chainstep.Length; i++)
                 {
@@ -350,6 +447,8 @@ namespace Gear_Builder_VKR
                         break; // Прерываем цикл, так как нашли первое значение больше t
                     }
                 }
+
+                CheckSave(t_fin,n1,z1);
 
                 double d1 = t_fin / Math.Sin(deg * 180 / z1);
                 double d2 = t_fin / Math.Sin(deg * 180 / z2);
@@ -498,6 +597,25 @@ namespace Gear_Builder_VKR
                         "При вводе вам предложат минимальное и максимальное значение","Внимание!");
                 }
             }
+        AllowablePressureTable PressureTable = new AllowablePressureTable();
+        RotationFrequencyTable frequencyTable = new RotationFrequencyTable();
+        private void CheckSave(double t_fin, double n1,double z1)
+        {
+            double pressure;
+            double rotation;
+
+            double V,Ft;
+
+                pressure = AllowablePressureTable.GetPressure(t_fin, n1);
+                rotation = RotationFrequencyTable.GetRotationFrequency(t_fin);
+
+
+            if( n1<=rotation)
+            {
+                V = z1 * n1 * t_fin / 60000; //скорость цепи
+                
+
+            }
         }
     }
     public class ChainStepData
@@ -539,10 +657,74 @@ namespace Gear_Builder_VKR
             // Добавьте остальные строки аналогичным образом
         };
 
+
+
         public static ChainStepData GetChainStepData(double tFin)
         {
             return chainSteps.FirstOrDefault(step => step.T == tFin);
         }
+
+    }
+    public class RotationFrequencyTable
+    {
+        private static Dictionary<double, int> _frequencyTable = new Dictionary<double, int>
+    {
+        { 12.7, 1250 },
+        { 15.875, 1000 },
+        { 19.05, 900 },
+        { 25.4, 800 },
+        { 31.75, 630 },
+        { 38.1, 500 },
+        { 44.45, 400 },
+        { 50.8, 300 }
+    };
+
+        public static int GetRotationFrequency(double step)
+        {
+            if (_frequencyTable.ContainsKey(step))
+            {
+                return _frequencyTable[step];
+            }
+            throw new ArgumentException("Invalid step value");
+        }
+    }
+
+    public class AllowablePressureTable
+    {
+        // Таблица допустимого среднего давления
+        public static Dictionary<int, Dictionary<double, double>> PressureTable = new Dictionary<int, Dictionary<double, double>>
+    {
+        { 50, new Dictionary<double, double> { { 12.7, 7.1 }, { 15.875, 7.2 }, { 19.05, 7.2 }, { 25.4, 7.3 }, { 31.75, 7.4 }, { 38.1, 7.5 }, { 44.45, 7.6 }, { 50.8, 7.6 } } },
+        { 100, new Dictionary<double, double> { { 12.7, 7.3 }, { 15.875, 7.4 }, { 19.05, 7.5 }, { 25.4, 7.6 }, { 31.75, 7.8 }, { 38.1, 8.0 }, { 44.45, 8.1 }, { 50.8, 8.3 } } },
+        { 300, new Dictionary<double, double> { { 12.7, 7.9 }, { 15.875, 8.2 }, { 19.05, 8.4 }, { 25.4, 8.9 }, { 31.75, 9.4 }, { 38.1, 9.8 }, { 44.45, 10.3 }, { 50.8, 10.8 } } },
+        { 500, new Dictionary<double, double> { { 12.7, 8.5 }, { 15.875, 8.9 }, { 19.05, 9.4 }, { 25.4, 10.2 }, { 31.75, 11.0 }, { 38.1, 11.8 }, { 44.45, 12.5 } } },
+        { 750, new Dictionary<double, double> { { 12.7, 9.3 }, { 15.875, 10.0 }, { 19.05, 10.7 }, { 25.4, 12.0 }, { 31.75, 13.0 }, { 38.1, 14.0 } } },
+        { 1000, new Dictionary<double, double> { { 12.7, 10.0 }, { 15.875, 10.8 }, { 19.05, 11.7 }, { 25.4, 13.3 }, { 31.75, 15.0 } } },
+        { 1250, new Dictionary<double, double> { { 12.7, 10.6 }, { 15.875, 11.6 }, { 19.05, 12.7 }, { 25.4, 14.5 } } }
+    };
+
+        // Функция для получения ближайшего допустимого среднего давления
+        public static double GetPressure(double step, double n1)
+        {
+            // Найти ближайшее большее или равное значение n1 в словаре
+            var closestN1 = PressureTable.Keys.Where(k => k >= n1).OrderBy(k => k).FirstOrDefault();
+
+            // Если значение n1 меньше минимального значения в таблице, использовать минимальное значение
+            if (closestN1 == 0)
+            {
+                closestN1 = PressureTable.Keys.Min();
+            }
+
+            // Проверка, существует ли шаг цепи в подтаблице
+            if (PressureTable[closestN1].ContainsKey(step))
+            {
+                return PressureTable[closestN1][step];
+            }
+
+            throw new ArgumentException("Invalid step value");
+        }
+
+       
     }
 
 }

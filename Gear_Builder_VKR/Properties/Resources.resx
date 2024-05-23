@@ -127,4 +127,31 @@
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Part3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Part3.m3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Ведомая_звездочка" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ведомая звездочка.m3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Ведущая_звездочка" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ведущая звездочка.m3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ЗВездочки_дял_цепи_25_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ЗВездочки дял цепи 25.4.m3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Ось" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ось.m3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Параметрическая_цепь_19_05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Параметрическая цепь 19,05.a3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Стяжка" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Стяжка.m3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="часть_для_массива" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\часть для массива.a3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="часть_для_массива2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\часть для массива2.a3d;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

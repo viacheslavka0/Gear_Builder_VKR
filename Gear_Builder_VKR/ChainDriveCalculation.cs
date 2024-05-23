@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Gear_Builder_VKR.Properties;
 
 
 namespace Gear_Builder_VKR
@@ -241,6 +242,8 @@ namespace Gear_Builder_VKR
         public static bool isFirstClick = true; 
         public void RebuildModel(ChainDriveCalculation calculation)
         {
+          
+
             KompasObject kompas;
             try
             {

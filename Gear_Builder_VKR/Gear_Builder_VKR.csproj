@@ -131,6 +131,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Part3.m3d" />
+    <None Include="Resources\Ведомая звездочка.m3d" />
+    <None Include="Resources\Ведущая звездочка.m3d" />
+    <None Include="Resources\Ось.m3d" />
+    <None Include="Resources\Параметрическая цепь 19,05.a3d" />
+    <None Include="Resources\Стяжка.m3d" />
+    <None Include="Resources\часть для массива.a3d" />
+    <None Include="Resources\часть для массива2.a3d" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -183,6 +191,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ЗВездочки дял цепи 25.4.m3d" />
     <None Include="Resources\Цепь.png" />
   </ItemGroup>
   <ItemGroup>
