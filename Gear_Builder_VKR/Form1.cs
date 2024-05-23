@@ -30,8 +30,8 @@ namespace Gear_Builder_VKR
         int number = 1;
         int calctype = 0;
 
-        public string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//Приводная роликовая цепь";
-        
+        public string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Приводная роликовая цепь";
+
 
 
         double p0 = 20;
@@ -60,7 +60,11 @@ namespace Gear_Builder_VKR
             conditions.K4 = 1;
 
             textBox1.Text = filePath;
-            GlobalData.FolderPath = folderPath;
+            GlobalData.FolderPath = filePath;
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
         }
 
         ModelUpdater modelUpdater = new ModelUpdater();
@@ -209,7 +213,7 @@ namespace Gear_Builder_VKR
             }
         }
 
-        
+
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -225,7 +229,7 @@ namespace Gear_Builder_VKR
 
         }
 
-        
+
 
         private void label14_Click(object sender, EventArgs e)
         {
@@ -386,15 +390,15 @@ namespace Gear_Builder_VKR
             double k4 = conditions.K4;
 
             double ke = k1 * k2 * k3 * k4;
-            
+
             if (calctype == 3)
             {
                 m = Convert.ToDouble(torgue.Text);
-                
+
                 if (
                !ValidateInput(frequency1, "Частота вращения не может быть отрицательной или нулевой", isFrequency1Active) ||
                !ValidateInput(torgue, "Крутящий момент не может быть отрицательным или нулевым", isGerratioActive) ||
-               !ValidateInput(gearratio, "Передаточное число не может быть отрицательным или нулевым", isGerratioActive) 
+               !ValidateInput(gearratio, "Передаточное число не может быть отрицательным или нулевым", isGerratioActive)
                )
                 {
                     return;
@@ -416,232 +420,265 @@ namespace Gear_Builder_VKR
                     return;
                 }
                 n2 = Math.Round(n1 / u);
+                nn = n1 * m / 9550;
                 frequency2.Text = Convert.ToString(n2);
                 linksnumber1.Text = Convert.ToString(z1);
                 linksnumber2.Text = Convert.ToString(z2);
 
-            }else
-            { 
-             
-           
-            if (nn > 0.0 && n1 > 0.0)
+            }
+            else
             {
-                m = Math.Round(9550000 * (nn / n1), 2);
-                u = Math.Round(n1 / n2, 2);
 
-                z1 = Math.Floor(29 - 2 * u);
-                z1 -= z1 % 2 == 0 ? 1 : 0;
 
-                z2 = Math.Floor(z1 * u);
-                z2 -= z2 % 2 == 1 ? 1 : 0;
-            }
-            }
-
-                double t = 2.8 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
-                double t_fin = chainstep[0];
-                for (int i = 0; i < chainstep.Length; i++)
+                if (nn > 0.0 && n1 > 0.0)
                 {
-                    if (chainstep[i] > t)
-                    {
-                        t_fin = chainstep[i];
-                        break; // Прерываем цикл, так как нашли первое значение больше t
-                    }
-                }
+                    m = Math.Round(9550000 * (nn / n1), 2);
+                    u = Math.Round(n1 / n2, 2);
 
-                CheckSave(t_fin,n1,z1);
+                    z1 = Math.Floor(29 - 2 * u);
+                    z1 -= z1 % 2 == 0 ? 1 : 0;
 
-                double d1 = t_fin / Math.Sin(deg * 180 / z1);
-                double d2 = t_fin / Math.Sin(deg * 180 / z2);
-
-                var stepData = ChainStepData.GetChainStepData(t_fin);
-                double b1, d1_, d4_, b7, h1_, d3_, rn;
-
-                    // Присваиваем значения из stepData
-                    b1 = stepData.B1;
-                    d1_ = stepData.D1;
-                    d4_ = stepData.D4;
-                    b7 = stepData.B7;
-                    h1_ = stepData.H1;
-                    d3_ = stepData.D3;
-                    rn = stepData.Rn;
-
-                double delta = t_fin/d4_;
-                double K=0.5;
-                if (delta >= 1.4 || delta < 1.5) K = 0.48;
-                if (delta >= 1.5 || delta < 1.5) K = 0.532;
-                if (delta >= 1.6 || delta < 1.7) K = 0.555;
-                
-                double da1 = t_fin * (K + 1 / Math.Tan(deg * 180 / z1));
-                double da2 = t_fin * (K + 1 / Math.Tan(deg * 180 / z2));
-
-                if (currentDistance > 0)
-                {
-                    a = currentDistance;
-                }
-                else
-                {
-                    a = 40 + (da1 + da2) / 2;
-                }
-                double a1;
-                if (currentAngle > 0)
-                {
-                    a1 = currentAngle;
-                }
-                else { a1 = 0; }
-
-
-                double La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
-                La = Math.Round(La);
-                La -= La % 2 == 1 ? 1 : 0;
-
-                double af = t_fin / 4 * (La - ((z1 + z2) / 2) + Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2))));
-
-                linksnumber1.Text = Convert.ToString(z1);
-                linksnumber2.Text = Convert.ToString(z2);
-                gearratio.Text = Convert.ToString(u);
-                torgue.Text = Convert.ToString(m);
-
-                d1_label.Text = $"d1: {Math.Round(d1, 2)}";
-                d2_label.Text = $"d2: {Math.Round(d2, 2)}";
-
-                da1_label.Text = $"da1: {Math.Round(da1, 2)}";
-                da2_label.Text = $"da2: {Math.Round(da2, 2)}";
-
-                a_label.Text = $"a: {Math.Round(a, 2)}";
-                L_label.Text = $"La: {La}";
-                af_label.Text = $"Af: {Math.Round(af, 2)}";
-                step.Text = Convert.ToString(t_fin);
-
-                //Расчет звездочки
-                double dn1 = t_fin * (K + 1 / Math.Tan(180.0 / z1 * (Math.PI / 180.0)));
-                double dn2 = t_fin * (K + 1 / Math.Tan(180.0 / z2 * (Math.PI / 180.0)));
-                double r = 0.5025 * d4_;
-                double dvn1 = d1 - 2 * r;
-                double dvn2 = d2 - 2 * r;
-                double alpha1 = 55 - (60 / z1);
-                double alpha2 = 55 - (60 / z2);
-                double fi1 = 360 / z1;
-                double fi2 = 360 / z2;
-                double y1 = 17-(64/z1);
-                double y2 = 17-(64/z2);
-                double beta1 = 18 - (56 /z1);
-                double beta2 = 18 - (56 /z2);
-                double r11 = 0.8 * d4_ + r;
-                double r12 = 0.8 * d4_ + r;
-                double fg1 = d4_*(1.24*Math.Sin(deg*y1)-0.8*Math.Sin(deg * beta1));
-                double fg2 = d4_*(1.24*Math.Sin(deg * y2)-0.8*Math.Sin(deg * beta2));
-                double r21 = d4_*(0.8*Math.Cos(deg * beta1)+1.24*Math.Cos(deg * y1)-1.3025)-0.05;
-                double r22 = d4_*(0.8*Math.Cos(deg * beta2)+1.24*Math.Cos(deg * y2)-1.3025)-0.05;
-
-                GlobalData.Calculations.Add(new ChainDriveCalculation
-                {
-                    Nn = Math.Round(nn, 2),
-                    N1 = Math.Round(n1, 2),
-                    N2 = Math.Round(n2, 2),
-
-                    M = m,
-                    U = u,
-                    Z1 = z1,
-                    Z2 = z2,
-                    T = Math.Round(t, 2),
-                    TFin = t_fin,
-                    A = Math.Round(a, 2),
-                    Af = Math.Round(af, 2),
-                    La = La,
-                    Da1 = Math.Round(da1, 2),
-                    Da2 = Math.Round(da2, 2),
-                    D1 = Math.Round(d1, 2),
-                    D2 = Math.Round(d2, 2),
-                    A1 = a1,
-                    B1 = b1,
-                    D1_ = d1_,
-                    D4_ = d4_,
-                    B7 = b7,
-                    H1_ = h1_,
-                    D3_ = d3_,
-                    Rn = rn,
-
-                    Dn1 = dn1,
-                    Dn2 = dn2,
-                    R=r,
-                    Dvn1=dvn1,
-                    Dvn2=dvn2,
-                    Alpha1=alpha1,
-                    Alpha2=alpha2,
-                    Fi1=fi1,
-                    Fi2=fi2,
-                    Y1= y1,
-                    Y2= y2,
-                    Beta1=beta1,
-                    Beta2=beta2,
-                    R11=r11,
-                    R12=r12,
-                    Fg1=fg1,
-                    Fg2=fg2,
-                    R21=r21,
-                    R22=r22,
-                }) ;
-                
-
-                build_btn.Enabled = true;
-
-                DateTime now = DateTime.Now;
-                string timeString = now.ToString("HH:mm:ss");
-                richTextBox1.Text += $"{timeString} :Расчет №{number} выполнен \n";
-                number++;
-
-                if (resultFirstClick)
-                {
-                    resultFirstClick = false;
-                    MessageBox.Show("Теперь вы можете нажать на кнопку 'Еще' и уточнить межосевое расстояние \n\n" +
-                        "При вводе вам предложат минимальное и максимальное значение","Внимание!");
+                    z2 = Math.Floor(z1 * u);
+                    z2 -= z2 % 2 == 1 ? 1 : 0;
                 }
             }
+
+            double t = 2.8 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
+            double t_fin = chainstep[0];
+            for (int i = 0; i < chainstep.Length; i++)
+            {
+                if (chainstep[i] > t)
+                {
+                    t_fin = chainstep[i];
+                    break; // Прерываем цикл, так как нашли первое значение больше t
+                }
+            }
+
+            CheckSave(t_fin, n1, z1, nn, ke);
+
+            double d1 = t_fin / Math.Sin(deg * 180 / z1);
+            double d2 = t_fin / Math.Sin(deg * 180 / z2);
+
+            var stepData = ChainStepData.GetChainStepData(t_fin);
+            double b1, d1_, d4_, b7, h1_, d3_, rn;
+
+            // Присваиваем значения из stepData
+            b1 = stepData.B1;
+            d1_ = stepData.D1;
+            d4_ = stepData.D4;
+            b7 = stepData.B7;
+            h1_ = stepData.H1;
+            d3_ = stepData.D3;
+            rn = stepData.Rn;
+
+            double delta = t_fin / d4_;
+            double K = 0.5;
+            if (delta >= 1.4 || delta < 1.5) K = 0.48;
+            if (delta >= 1.5 || delta < 1.5) K = 0.532;
+            if (delta >= 1.6 || delta < 1.7) K = 0.555;
+
+            double da1 = t_fin * (K + 1 / Math.Tan(deg * 180 / z1));
+            double da2 = t_fin * (K + 1 / Math.Tan(deg * 180 / z2));
+
+            if (currentDistance > 0)
+            {
+                a = currentDistance;
+            }
+            else
+            {
+                a = 40 + (da1 + da2) / 2;
+            }
+            double a1;
+            if (currentAngle > 0)
+            {
+                a1 = currentAngle;
+            }
+            else { a1 = 0; }
+
+
+            double La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
+            La = Math.Round(La);
+            La -= La % 2 == 1 ? 1 : 0;
+
+            double af = t_fin / 4 * (La - ((z1 + z2) / 2) + Math.Sqrt(Math.Pow(La - ((z1 + z2) / 2), 2) - (8 * Math.Pow((z2 - z1) / (2 * 3.14), 2))));
+
+            linksnumber1.Text = Convert.ToString(z1);
+            linksnumber2.Text = Convert.ToString(z2);
+            gearratio.Text = Convert.ToString(u);
+            torgue.Text = Convert.ToString(m);
+
+            d1_label.Text = $"d1: {Math.Round(d1, 2)}";
+            d2_label.Text = $"d2: {Math.Round(d2, 2)}";
+
+            da1_label.Text = $"da1: {Math.Round(da1, 2)}";
+            da2_label.Text = $"da2: {Math.Round(da2, 2)}";
+
+            a_label.Text = $"a: {Math.Round(a, 2)}";
+            L_label.Text = $"La: {La}";
+            af_label.Text = $"Af: {Math.Round(af, 2)}";
+            step.Text = Convert.ToString(t_fin);
+
+            //Расчет звездочки
+            double dn1 = t_fin * (K + 1 / Math.Tan(180.0 / z1 * (Math.PI / 180.0)));
+            double dn2 = t_fin * (K + 1 / Math.Tan(180.0 / z2 * (Math.PI / 180.0)));
+            double r = 0.5025 * d4_;
+            double dvn1 = d1 - 2 * r;
+            double dvn2 = d2 - 2 * r;
+            double alpha1 = 55 - (60 / z1);
+            double alpha2 = 55 - (60 / z2);
+            double fi1 = 360 / z1;
+            double fi2 = 360 / z2;
+            double y1 = 17 - (64 / z1);
+            double y2 = 17 - (64 / z2);
+            double beta1 = 18 - (56 / z1);
+            double beta2 = 18 - (56 / z2);
+            double r11 = 0.8 * d4_ + r;
+            double r12 = 0.8 * d4_ + r;
+            double fg1 = d4_ * (1.24 * Math.Sin(deg * y1) - 0.8 * Math.Sin(deg * beta1));
+            double fg2 = d4_ * (1.24 * Math.Sin(deg * y2) - 0.8 * Math.Sin(deg * beta2));
+            double r21 = d4_ * (0.8 * Math.Cos(deg * beta1) + 1.24 * Math.Cos(deg * y1) - 1.3025) - 0.05;
+            double r22 = d4_ * (0.8 * Math.Cos(deg * beta2) + 1.24 * Math.Cos(deg * y2) - 1.3025) - 0.05;
+
+            GlobalData.Calculations.Add(new ChainDriveCalculation
+            {
+                Nn = Math.Round(nn, 2),
+                N1 = Math.Round(n1, 2),
+                N2 = Math.Round(n2, 2),
+
+                M = m,
+                U = u,
+                Z1 = z1,
+                Z2 = z2,
+                T = Math.Round(t, 2),
+                TFin = t_fin,
+                A = Math.Round(a, 2),
+                Af = Math.Round(af, 2),
+                La = La,
+                Da1 = Math.Round(da1, 2),
+                Da2 = Math.Round(da2, 2),
+                D1 = Math.Round(d1, 2),
+                D2 = Math.Round(d2, 2),
+                A1 = a1,
+                B1 = b1,
+                D1_ = d1_,
+                D4_ = d4_,
+                B7 = b7,
+                H1_ = h1_,
+                D3_ = d3_,
+                Rn = rn,
+
+                Dn1 = dn1,
+                Dn2 = dn2,
+                R = r,
+                Dvn1 = dvn1,
+                Dvn2 = dvn2,
+                Alpha1 = alpha1,
+                Alpha2 = alpha2,
+                Fi1 = fi1,
+                Fi2 = fi2,
+                Y1 = y1,
+                Y2 = y2,
+                Beta1 = beta1,
+                Beta2 = beta2,
+                R11 = r11,
+                R12 = r12,
+                Fg1 = fg1,
+                Fg2 = fg2,
+                R21 = r21,
+                R22 = r22,
+            });
+
+
+            build_btn.Enabled = true;
+
+            DateTime now = DateTime.Now;
+            string timeString = now.ToString("HH:mm:ss");
+            richTextBox1.Text += $"{timeString} :Расчет №{number} выполнен \n";
+            number++;
+
+          
+        }
         AllowablePressureTable PressureTable = new AllowablePressureTable();
         RotationFrequencyTable frequencyTable = new RotationFrequencyTable();
-        private void CheckSave(double t_fin, double n1,double z1)
+        private void CheckSave(double t_fin, double n1, double z1, double nn, double Ke)
         {
             double pressure;
             double rotation;
+            double sValue;
 
-            double V,Ft;
+            pressure = AllowablePressureTable.GetPressure(t_fin, n1);
+            rotation = RotationFrequencyTable.GetRotationFrequency(t_fin);
+            sValue = RotationFrequencyTable.GetSValue(t_fin);
 
-                pressure = AllowablePressureTable.GetPressure(t_fin, n1);
-                rotation = RotationFrequencyTable.GetRotationFrequency(t_fin);
+            double V = z1 * n1 * t_fin / 60000; //скорость цепи
+            double Ft = nn / V;
 
+            double p = pressure * (1 + 0.01 * (z1 - 17));
+            double iznos = Ft * Ke / sValue;
 
-            if( n1<=rotation)
+            if (iznos <= p)
             {
-                V = z1 * n1 * t_fin / 60000; //скорость цепи
-                
+                double pp = (iznos - p) / p * 100;
+                if (false)
+                {
+                    //MessageBox.Show("Отрицательное значение недогрузки цепи, меняем число зубьев");
+                    //z1 *= 0.85;
+                    //double z2 = z1 * (n1 / rotation);
+                    //CheckSave(t_fin, n1, z1, nn, Ke);
+                }
+                else
+                {
+                    // Step is acceptable
+                    double nextStep = RotationFrequencyTable.GetNextStep(t_fin, n1);
+                    double nextPressure = AllowablePressureTable.GetPressure(nextStep, n1);
+                    double nextRotation = RotationFrequencyTable.GetRotationFrequency(nextStep);
 
+                    if (n1 <= nextRotation)
+                    {
+                        // Optionally ask user to choose between current step and next step
+                        var result = MessageBox.Show($"Вы можете использовать либо {t_fin}, либо {nextStep} в качестве шага цепи. Хотите использовать {nextStep}?", "Выбор шага цепи", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            t_fin = nextStep;
+                            pressure = nextPressure;
+                            rotation = nextRotation;
+                            sValue = RotationFrequencyTable.GetSValue(nextStep);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Износ превышает допустимое значение.");
             }
         }
-    }
-    public class ChainStepData
-    {
-        public double T { get; set; }
-        public double B1 { get; set; }
-        public double D1 { get; set; }
-        public double D4 { get; set; }
-        public double D3 { get; set; }
-        public double H1 { get; set; }
-        public double B7 { get; set; }
-        public double Rn { get; set; }
 
 
-        public ChainStepData(double t, double b1, double d1, double d4, double d3, double h1, double b7, double rn)
+
+        public class ChainStepData
         {
-            T = t;
-            B1 = b1;
-            D1 = d1;
-            D4 = d4;
-            D3 = d3; // там везде поставил по 8, потом проверитЬ, как будет выглядеть (это d3_ на моем рисунке) 
-            H1 = h1;
-            B7 = b7;
-            Rn = rn;
-        }
-        public static List<ChainStepData> chainSteps = new List<ChainStepData>
+            public double T { get; set; }
+            public double B1 { get; set; }
+            public double D1 { get; set; }
+            public double D4 { get; set; }
+            public double D3 { get; set; }
+            public double H1 { get; set; }
+            public double B7 { get; set; }
+            public double Rn { get; set; }
+
+
+            public ChainStepData(double t, double b1, double d1, double d4, double d3, double h1, double b7, double rn)
+            {
+                T = t;
+                B1 = b1;
+                D1 = d1;
+                D4 = d4;
+                D3 = d3; // там везде поставил по 8, потом проверитЬ, как будет выглядеть (это d3_ на моем рисунке) 
+                H1 = h1;
+                B7 = b7;
+                Rn = rn;
+            }
+            public static List<ChainStepData> chainSteps = new List<ChainStepData>
         {
             new ChainStepData(8.0, 3.00, 2.31, 5.00, 4, 7, 12, 4.6),
             new ChainStepData(9.525, 5.72, 3.28, 6.35, 5, 7, 15, 9.1),
@@ -659,72 +696,96 @@ namespace Gear_Builder_VKR
 
 
 
-        public static ChainStepData GetChainStepData(double tFin)
-        {
-            return chainSteps.FirstOrDefault(step => step.T == tFin);
-        }
+            public static ChainStepData GetChainStepData(double tFin)
+            {
+                return chainSteps.FirstOrDefault(step => step.T == tFin);
+            }
 
-    }
-    public class RotationFrequencyTable
+        }
+        public class RotationFrequencyTable
+        {
+            private static Dictionary<double, (int RotationFrequency, double S)> _frequencyTable = new Dictionary<double, (int, double)>
     {
-        private static Dictionary<double, int> _frequencyTable = new Dictionary<double, int>
-    {
-        { 12.7, 1250 },
-        { 15.875, 1000 },
-        { 19.05, 900 },
-        { 25.4, 800 },
-        { 31.75, 630 },
-        { 38.1, 500 },
-        { 44.45, 400 },
-        { 50.8, 300 }
+        { 12.7, (1250, 105) },
+        { 15.875, (1000, 140) },
+        { 19.05, (900, 211) },
+        { 25.4, (800, 359) },
+        { 31.75, (630, 524) },
+        { 38.1, (500, 788) },
+        { 44.45, (400, 946) },
+        { 50.8, (300, 1292) }
     };
 
-        public static int GetRotationFrequency(double step)
-        {
-            if (_frequencyTable.ContainsKey(step))
+            public static int GetRotationFrequency(double step)
             {
-                return _frequencyTable[step];
+                if (_frequencyTable.ContainsKey(step))
+                {
+                    return _frequencyTable[step].RotationFrequency;
+                }
+                throw new ArgumentException("Invalid step value");
             }
-            throw new ArgumentException("Invalid step value");
-        }
-    }
 
-    public class AllowablePressureTable
+            public static double GetSValue(double step)
+            {
+                if (_frequencyTable.ContainsKey(step))
+                {
+                    return _frequencyTable[step].S;
+                }
+                throw new ArgumentException("Invalid step value");
+            }
+
+            public static double GetNextStep(double currentStep, double n1)
+            {
+                var steps = _frequencyTable.Keys.OrderBy(k => k).ToList();
+                for (int i = 0; i < steps.Count - 1; i++)
+                {
+                    if (steps[i] == currentStep && GetRotationFrequency(steps[i + 1]) >= n1)
+                    {
+                        return steps[i + 1];
+                    }
+                }
+                return currentStep; // Return the current step if no suitable next step found
+            }
+        }
+
+        public class AllowablePressureTable
+        {
+            // Таблица допустимого среднего давления
+            public static Dictionary<int, Dictionary<double, double>> PressureTable = new Dictionary<int, Dictionary<double, double>>
     {
-        // Таблица допустимого среднего давления
-        public static Dictionary<int, Dictionary<double, double>> PressureTable = new Dictionary<int, Dictionary<double, double>>
-    {
-        { 50, new Dictionary<double, double> { { 12.7, 7.1 }, { 15.875, 7.2 }, { 19.05, 7.2 }, { 25.4, 7.3 }, { 31.75, 7.4 }, { 38.1, 7.5 }, { 44.45, 7.6 }, { 50.8, 7.6 } } },
-        { 100, new Dictionary<double, double> { { 12.7, 7.3 }, { 15.875, 7.4 }, { 19.05, 7.5 }, { 25.4, 7.6 }, { 31.75, 7.8 }, { 38.1, 8.0 }, { 44.45, 8.1 }, { 50.8, 8.3 } } },
-        { 300, new Dictionary<double, double> { { 12.7, 7.9 }, { 15.875, 8.2 }, { 19.05, 8.4 }, { 25.4, 8.9 }, { 31.75, 9.4 }, { 38.1, 9.8 }, { 44.45, 10.3 }, { 50.8, 10.8 } } },
-        { 500, new Dictionary<double, double> { { 12.7, 8.5 }, { 15.875, 8.9 }, { 19.05, 9.4 }, { 25.4, 10.2 }, { 31.75, 11.0 }, { 38.1, 11.8 }, { 44.45, 12.5 } } },
-        { 750, new Dictionary<double, double> { { 12.7, 9.3 }, { 15.875, 10.0 }, { 19.05, 10.7 }, { 25.4, 12.0 }, { 31.75, 13.0 }, { 38.1, 14.0 } } },
-        { 1000, new Dictionary<double, double> { { 12.7, 10.0 }, { 15.875, 10.8 }, { 19.05, 11.7 }, { 25.4, 13.3 }, { 31.75, 15.0 } } },
-        { 1250, new Dictionary<double, double> { { 12.7, 10.6 }, { 15.875, 11.6 }, { 19.05, 12.7 }, { 25.4, 14.5 } } }
+        { 50, new Dictionary<double, double> { { 12.7, 46 }, { 15.875, 43 }, { 19.05, 39 }, { 25.4, 36 }, { 31.75, 34 }, { 38.1, 31 }, { 44.45, 29 }, { 50.8, 27 } } },
+        { 100, new Dictionary<double, double> { { 12.7, 37 }, { 15.875, 34 }, { 19.05, 31 }, { 25.4, 29 }, { 31.75, 27 }, { 38.1, 25 }, { 44.45, 23 }, { 50.8, 22 } } },
+        { 200, new Dictionary<double, double> { { 12.7, 29 }, { 15.875, 27 }, { 19.05, 25 }, { 25.4, 23 }, { 31.75, 22 }, { 38.1, 19 }, { 44.45, 18 }, { 50.8, 17 } } },
+        { 300, new Dictionary<double, double> { { 12.7, 26 }, { 15.875, 24 }, { 19.05, 22 }, { 25.4, 20 }, { 31.75, 19 }, { 38.1, 17 }, { 44.45, 16 }, { 50.8, 15 } } },
+        { 500, new Dictionary<double, double> { { 12.7, 22 }, { 15.875, 20 }, { 19.05, 18 }, { 25.4, 17 }, { 31.75, 16 }, { 38.1, 14 }, { 44.45, 13 }, { 50.8, 12 } } },
+        { 750, new Dictionary<double, double> { { 12.7, 19 }, { 15.875, 17 }, { 19.05, 16 }, { 25.4, 15 }, { 31.75, 14 }, { 38.1, 13 } } },
+        { 1000, new Dictionary<double, double> { { 12.7, 17 }, { 15.875, 16 }, { 19.05, 14 }, { 25.4, 13 }, { 31.75, 13 } } },
+        { 1250, new Dictionary<double, double> { { 12.7, 16 }, { 15.875, 15 }, { 19.05, 13 }, { 25.4, 12 } } }
     };
 
-        // Функция для получения ближайшего допустимого среднего давления
-        public static double GetPressure(double step, double n1)
-        {
-            // Найти ближайшее большее или равное значение n1 в словаре
-            var closestN1 = PressureTable.Keys.Where(k => k >= n1).OrderBy(k => k).FirstOrDefault();
-
-            // Если значение n1 меньше минимального значения в таблице, использовать минимальное значение
-            if (closestN1 == 0)
+            // Функция для получения ближайшего допустимого среднего давления
+            public static double GetPressure(double step, double n1)
             {
-                closestN1 = PressureTable.Keys.Min();
+                // Найти ближайшее большее или равное значение n1 в словаре
+                var closestN1 = PressureTable.Keys.Where(k => k >= n1).OrderBy(k => k).FirstOrDefault();
+
+                // Если значение n1 меньше минимального значения в таблице, использовать минимальное значение
+                if (closestN1 == 0)
+                {
+                    closestN1 = PressureTable.Keys.Min();
+                }
+
+                // Проверка, существует ли шаг цепи в подтаблице
+                if (PressureTable[closestN1].ContainsKey(step))
+                {
+                    return PressureTable[closestN1][step];
+                }
+
+                throw new ArgumentException("Invalid step value");
             }
 
-            // Проверка, существует ли шаг цепи в подтаблице
-            if (PressureTable[closestN1].ContainsKey(step))
-            {
-                return PressureTable[closestN1][step];
-            }
 
-            throw new ArgumentException("Invalid step value");
         }
 
-       
     }
-
 }
