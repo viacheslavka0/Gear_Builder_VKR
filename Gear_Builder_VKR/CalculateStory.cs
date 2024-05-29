@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Reflection;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace Gear_Builder_VKR
 {
@@ -216,20 +212,20 @@ namespace Gear_Builder_VKR
                 return;
             }
 
-            ChainDriveCalculation selectedCalculation = GlobalData.Calculations[selectedRowIndex.Value-1];
+            ChainDriveCalculation selectedCalculation = GlobalData.Calculations[selectedRowIndex.Value - 1];
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\CalculationResults.txt";
 
             using (StreamWriter writer = new StreamWriter(filePath))
             {
-                writer.WriteLine("Передаваемая мощность (N) - " + selectedCalculation.Nn +" кВт");
+                writer.WriteLine("Передаваемая мощность (N) - " + selectedCalculation.Nn + " кВт");
                 writer.WriteLine("Число оборотов ведущей звездочки (n1) - " + selectedCalculation.N1);
                 writer.WriteLine("Число оборотов ведомой звездочки (n2) - " + selectedCalculation.N2);
                 writer.WriteLine("Крутящий момент (M) - " + selectedCalculation.M + " Н*м");
                 writer.WriteLine("Передаточное число (U) - " + selectedCalculation.U);
                 writer.WriteLine("Число звеньев ведущей звездочки (z1) - " + selectedCalculation.Z1);
                 writer.WriteLine("Число звеньев ведомой звездочки (z2) - " + selectedCalculation.Z2);
-                writer.WriteLine("Типоразмер цепи - ПР-" + selectedCalculation.TFin+"-"+selectedCalculation.Rn);
-                writer.WriteLine("Делительный диаметр ведущей звездочки (d1) - " + selectedCalculation.D1+ " мм");
+                writer.WriteLine("Типоразмер цепи - ПР-" + selectedCalculation.TFin + "-" + selectedCalculation.Rn);
+                writer.WriteLine("Делительный диаметр ведущей звездочки (d1) - " + selectedCalculation.D1 + " мм");
                 writer.WriteLine("Делительный диаметр ведомой звездочки (d2) - " + selectedCalculation.D2 + " мм");
                 writer.WriteLine("Диаметр вершины ведущей звездоки (da1) - " + selectedCalculation.Da1 + " мм");
                 writer.WriteLine("Диаметр вершины ведомой звездоки (da2) - " + selectedCalculation.Da2 + " мм");

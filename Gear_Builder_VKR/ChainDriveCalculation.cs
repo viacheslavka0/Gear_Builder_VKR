@@ -1,17 +1,10 @@
-﻿using Gear_Builder_VKR;
-using Kompas6API5;
+﻿using Kompas6API5;
 using Kompas6Constants3D;
 using KompasAPI7;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using Gear_Builder_VKR.Properties;
 
 
 namespace Gear_Builder_VKR
@@ -40,7 +33,7 @@ namespace Gear_Builder_VKR
         public double Da2 { get; set; }
         public double D1 { get; set; }
         public double D2 { get; set; }
-        public double A1 {  get; set; }
+        public double A1 { get; set; }
 
         //ниже - для геометрических характеристик частей звена
         public double D1_ { get; set; }
@@ -52,8 +45,8 @@ namespace Gear_Builder_VKR
         public double Rn { get; set; }
 
         //параметры для звездочек
-        public double Dn1 {  get; set; }
-        public double R {  get; set; }
+        public double Dn1 { get; set; }
+        public double R { get; set; }
         public double Dvn1 { get; set; }
         public double Alpha1 { get; set; }
         public double Fi1 { get; set; }
@@ -78,7 +71,7 @@ namespace Gear_Builder_VKR
     // Создайте список для хранения расчетов
     public class Recursion
     {
-        public void GetDetails(IPart7 part, List<IPart7>parts)
+        public void GetDetails(IPart7 part, List<IPart7> parts)
         {
             parts.Add(part);
             foreach (IPart7 item in part.Parts)
@@ -115,10 +108,10 @@ namespace Gear_Builder_VKR
             ksVariableCollection varcoll = kPart.VariableCollection();
 
 
-           
+
 
             //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
-            
+
             //IDocuments documents = (IDocuments)application.Documents;
             //var document = documents.Open($"{GlobalData.FolderPath}//{partName}.m3d",false);
             //if (document == null)
@@ -127,7 +120,7 @@ namespace Gear_Builder_VKR
             //    return;
             //}
 
-            
+
 
             //ksVariable t = varcoll.GetByName("t");
             //ksVariable d4_ =varcoll.GetByName("d4_");
@@ -165,7 +158,7 @@ namespace Gear_Builder_VKR
 
 
 
-            if (partName=="Ведущая звездочка")
+            if (partName == "Ведущая звездочка")
             {
                 SetVariable(varcoll, "d_d", calculation.D1);
                 SetVariable(varcoll, "d_n", calculation.Dn1);
@@ -204,12 +197,12 @@ namespace Gear_Builder_VKR
             KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.Document3D();
             kompas_document_3D.Open(assemblyPath);
-            
+
             kompas.ActiveDocument3D();
             ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
 
             ksVariableCollection varcoll = kPart.VariableCollection();
-            
+
             SetVariable(varcoll, "NN", calculation.Nn);
             SetVariable(varcoll, "n1", calculation.N1);
             SetVariable(varcoll, "n2", calculation.N2);
@@ -235,50 +228,50 @@ namespace Gear_Builder_VKR
 
             varcoll.refresh();
             kPart.RebuildModel();
-            
+
         }
 
 
-        public static bool isFirstClick = true; 
+        public static bool isFirstClick = true;
         public void RebuildModel(ChainDriveCalculation calculation)
         {
-          
+
             KompasObject kompas;
             try
             {
-                  kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+                kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
             }
             catch { kompas = (KompasObject)Activator.CreateInstance(Type.GetTypeFromProgID("KOMPAS.Application.5")); }
             if (kompas == null) return;
-            kompas.Visible=true;
-            
+            kompas.Visible = true;
+
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
-            
-                while (kompas_document_3D != null)
-                {
-                    kompas_document_3D.close();
-                    kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
-                }
-            
-            
+
+            while (kompas_document_3D != null)
+            {
+                kompas_document_3D.close();
+                kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
+            }
+
+
             //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
             //IDocuments documents = (IDocuments)application.Documents;
 
             string assemblyPath = $"{GlobalData.FolderPath}\\Параметрическая цепь 19,05.a3d";
             if (kompas_document_3D == null && isFirstClick)
-          {
+            {
                 ProcessPart("Стяжка", assemblyPath);
                 ProcessPart("Part3", assemblyPath);
                 ProcessPart("Ось", assemblyPath);
                 isFirstClick = false;
-          }
+            }
             StarBuild("Ведущая звездочка", assemblyPath, calculation);
             StarBuild("Ведомая звездочка", assemblyPath, calculation);
             GearBuild(assemblyPath, calculation);
 
             //try
             //{
-           
+
             //}
             //catch (Exception ex)
             //{
@@ -287,7 +280,7 @@ namespace Gear_Builder_VKR
             //}
         }
 
-        
+
 
         private void SelectFolderAndRetry()
         {
@@ -297,7 +290,7 @@ namespace Gear_Builder_VKR
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     GlobalData.FolderPath = form.SelectedPath;
-                    RebuildModel(GlobalData.Calculations[GlobalData.Calculations.Count-1]); // Рекурсивный вызов функции для повторной попытки
+                    RebuildModel(GlobalData.Calculations[GlobalData.Calculations.Count - 1]); // Рекурсивный вызов функции для повторной попытки
                 }
                 else
                 {
@@ -321,9 +314,9 @@ namespace Gear_Builder_VKR
     {
         public void UpdateComponentParameters(Dictionary<string, double> parameters)
         {
-            
+
         }
     }
-   
+
 
 }

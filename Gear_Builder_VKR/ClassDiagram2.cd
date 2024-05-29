@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Gear_Builder_VKR.AdditionalParameters" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAACAAABAAAACAAAASAEA4IAAAEHAIAAAAgAI=</HashCode>
+      <FileName>AdditionalParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.CalculateStory" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SBAAAAAAACIAABUACACIAAACAABYAAAAAGCIAAAAiCA=</HashCode>
+      <FileName>CalculateStory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.GlobalData" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ChainDriveCalculation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.ChainDriveCalculation" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMEAAAEgICAAAACAAGBCgARQAiAhgDIJAAAAIAIGBUA=</HashCode>
+      <FileName>ChainDriveCalculation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.Recursion" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>ChainDriveCalculation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.ModelRebuilder" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAQgAAAAQAAAAAAAAQAACIAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ChainDriveCalculation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.ModelUpdater" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ChainDriveCalculation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.FolderSelectionForm" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAABAAAASAAAACAAAYAAAAAHCBAABAABA=</HashCode>
+      <FileName>FolderSelectionForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.Form1" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>/yAgwgAQGKAZcVUQKgGQqA9CDck9EE4yEn4uiKBAgHg=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.Operating_condition" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAKAAABBAAACAAICCAAAYIAIAQGAABAAAAAI=</HashCode>
+      <FileName>Operating condition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.Program" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.StepSelectionForm" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAQAAAAAAABAAAAAAABA=</HashCode>
+      <FileName>stepSelectionForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OperationConditions" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAEAAAAAAAAgAAAAAAAQACAAAAAIAAAAAA=</HashCode>
+      <FileName>Operating condition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.Properties.Resources" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAQAAAEAAAAAAABEAIAAQAQhAAgAAEAAAAAAoQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear_Builder_VKR.Properties.Settings" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

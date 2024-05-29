@@ -1,14 +1,8 @@
 ﻿using Kompas6API5;
 using Kompas6Constants3D;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gear_Builder_VKR
@@ -21,7 +15,7 @@ namespace Gear_Builder_VKR
             this.Size = new Size(560, 320);
             textBox1.Text = GlobalParameters.InitialCenterDistance.ToString();
             textBox2.Text = GlobalParameters.InclineAngle.ToString();
-          
+
             label3.Text = "";
             //label3.Text = "A_min = 0,6*(De1 + De2) + 30÷50мм \nA_max=80*t";
         }
@@ -122,12 +116,12 @@ namespace Gear_Builder_VKR
         private void button3_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Откройте документ в Компас-3D, в котором необходимо измерить межосеовое расстояние. \n\n" +
-                "Для этого выберите две цилиндричекие поверхности (через Ctrl) и нажмите ОК ","Внимание!",MessageBoxButtons.OKCancel);
+                "Для этого выберите две цилиндричекие поверхности (через Ctrl) и нажмите ОК ", "Внимание!", MessageBoxButtons.OKCancel);
             if (result == DialogResult.Cancel)
             {
                 return;
             }
-      
+
             {
                 try
                 {
@@ -206,7 +200,7 @@ namespace Gear_Builder_VKR
             // Загрузка сохраненных значений при открытии формы
             textBox1.Text = GlobalParameters.InitialCenterDistance.ToString();
             textBox2.Text = GlobalParameters.InclineAngle.ToString();
-            if (radioButton1.Checked ) { } else { textBox1.Enabled = false; }
+            if (radioButton1.Checked) { } else { textBox1.Enabled = false; }
         }
 
         public static class GlobalParameters
