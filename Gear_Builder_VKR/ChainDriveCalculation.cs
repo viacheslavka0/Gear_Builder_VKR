@@ -243,7 +243,6 @@ namespace Gear_Builder_VKR
         public void RebuildModel(ChainDriveCalculation calculation)
         {
           
-
             KompasObject kompas;
             try
             {

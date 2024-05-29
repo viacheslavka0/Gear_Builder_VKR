@@ -85,6 +85,7 @@ namespace Gear_Builder_VKR
                     Text = headers[columnIndex],
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
+                    Anchor = AnchorStyles.Left | AnchorStyles.Right,
                     Font = new Font("Arial", 11, FontStyle.Bold),
                 };
                 tableLayoutPanel1.Controls.Add(headerLabel, columnIndex, 0);
@@ -137,6 +138,7 @@ namespace Gear_Builder_VKR
                 {
                     Text = propInfo.GetValue(calculation)?.ToString(),
                     Dock = DockStyle.Fill,
+                    Anchor = AnchorStyles.Left | AnchorStyles.Right,
                     TextAlign = ContentAlignment.MiddleCenter,
                     Font = new Font("Arial", 9, FontStyle.Regular)
                 };
