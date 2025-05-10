@@ -36,6 +36,24 @@
     <Reference Include="KAPITypes">
       <HintPath>..\..\..\..\Desktop\Цепь ПР 19,05\KAPITypes.dll</HintPath>
     </Reference>
+    <Reference Include="KGAXLib, Version=1.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\Desktop\KGAXLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Kompas6API2D5COM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\Desktop\Kompas6API2D5COM.dll</HintPath>
+    </Reference>
+    <Reference Include="Kompas6API3D5COM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\Desktop\Kompas6API3D5COM.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +67,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdditionalParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdditionalParameters.Designer.cs">
+      <DependentUpon>AdditionalParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CalculateStory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CalculateStory.Designer.cs">
+      <DependentUpon>CalculateStory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChainDriveCalculation.cs" />
+    <Compile Include="FolderSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FolderSelectionForm.Designer.cs">
+      <DependentUpon>FolderSelectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +100,21 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="stepSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="stepSelectionForm.Designer.cs">
+      <DependentUpon>stepSelectionForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AdditionalParameters.resx">
+      <DependentUpon>AdditionalParameters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CalculateStory.resx">
+      <DependentUpon>CalculateStory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FolderSelectionForm.resx">
+      <DependentUpon>FolderSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -79,6 +131,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="stepSelectionForm.resx">
+      <DependentUpon>stepSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -88,6 +146,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Part3.m3d" />
+    <None Include="Resources\Ведомая звездочка.m3d" />
+    <None Include="Resources\Ведущая звездочка.m3d" />
+    <None Include="Resources\Ось.m3d" />
+    <None Include="Resources\Параметрическая цепь 19,05.a3d" />
+    <None Include="Resources\Стяжка.m3d" />
+    <None Include="Resources\часть для массива.a3d" />
+    <None Include="Resources\часть для массива2.a3d" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -140,6 +206,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ЗВездочки дял цепи 25.4.m3d" />
     <None Include="Resources\Цепь.png" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +214,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Фото цепи.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
