@@ -12,6 +12,8 @@ namespace Gear_Builder_VKR
 {
     public partial class Form1 : Form
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Добавить модификатор только для чтения", Justification = "<Ожидание>")]
+
         double nn, n1, n2, m, u, z1, z2, t, t_fin, a, af, La, da1, da2, d1, d2, Ke;
         double[] chainstep = { 8.0, 9.525, 12.7, 15.875, 19.05, 25.4, 31.75, 38.1, 44.45, 50.8, 63.5 };
 
@@ -23,6 +25,8 @@ namespace Gear_Builder_VKR
         double k2;
         double k3;
         double k4;
+
+        public const string CalculationsFilePath = "calculations.json";
 
         public string filePath =
             Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Приводная роликовая цепь";
@@ -37,11 +41,27 @@ namespace Gear_Builder_VKR
         ksPart kPart;
 
         ModelRebuilder modelRebuilder = new ModelRebuilder();
-        DateTime now = DateTime.Now;
-
 
         private void button1_Click(object sender, EventArgs e)
         {
+        }
+
+ 
+        public Form1()
+        {
+            InitializeComponent();
+            LoadCalculations();
+
+            FormClosing += new FormClosingEventHandler(Form1_FormClosing);
+            ChoiseType.SelectedIndex = 0;
+
+            System.Windows.Forms.TextBox[] textBoxes =
+                { power, frequency1, frequency2, gearratio, torgue, linksnumber1, linksnumber2, step };
+
+            foreach (var textBox in textBoxes)
+            {
+                textBox.Enabled = false;
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -60,6 +80,25 @@ namespace Gear_Builder_VKR
 
             button6.Enabled = false;
             groupBox3.Enabled = false;
+
+
+
+        }
+
+    
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveCalculations();
+        }
+
+        private void SaveCalculations()
+        {
+            GlobalData.SaveCalculationsToFile(CalculationsFilePath);
+        }
+
+        private void LoadCalculations()
+        {
+            GlobalData.LoadCalculationsFromFile(CalculationsFilePath);
         }
 
         ModelUpdater modelUpdater = new ModelUpdater();
@@ -73,8 +112,7 @@ namespace Gear_Builder_VKR
             using (FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog())
             {
                 folderBrowserDialog1.Description = "Выберите папку для сохранения файлов";
-                folderBrowserDialog1.ShowNewFolderButton =
-                    true; // Опционально, позволяет создавать новую папку в диалоге
+                folderBrowserDialog1.ShowNewFolderButton = true; 
 
                 DialogResult result = folderBrowserDialog1.ShowDialog();
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog1.SelectedPath))
@@ -89,7 +127,6 @@ namespace Gear_Builder_VKR
 
         private void SaveResourcesToFolder(string folderPath)
         {
-            // Список ресурсов и их названий файлов
             var resourceFiles = new Dictionary<byte[], string>
             {
                 { Resources.Part3, "Part3.m3d" },
@@ -102,12 +139,11 @@ namespace Gear_Builder_VKR
                 { Resources.часть_для_массива2, "часть для массива2.a3d" }
             };
 
-            // Сохранение каждого ресурса в указанную папку
             foreach (var resourceFile in resourceFiles)
             {
                 string filePath = Path.Combine(folderPath, resourceFile.Value);
                 bool fileSaved = false;
-
+                
                 while (!fileSaved)
                 {
                     try
@@ -147,30 +183,11 @@ namespace Gear_Builder_VKR
             additionalParameters.Show();
         }
 
-        private void ChoiseType_DropDown(object sender, EventArgs e)
-        {
-            System.Windows.Forms.ComboBox comboBox = sender as System.Windows.Forms.ComboBox;
-            if (ChoiseType != null)
-            {
-                for (int i = 0; i < ChoiseType.Items.Count; i++)
-                {
-                    string itemText = ChoiseType.GetItemText(ChoiseType.Items[i]);
-                    // Установка текста в Tooltip
-                    if (itemText.Length > 50)
-                    {
-                        itemText = itemText.Substring(0, 50) + "...";
-                    }
-
-                    toolTip.SetToolTip(ChoiseType, itemText);
-                }
-            }
-        }
-
         private void ChoiseType_SelectedIndexChanged(object sender, EventArgs e)
         {
             System.Windows.Forms.TextBox[] textBoxes =
                 { power, frequency1, frequency2, gearratio, torgue, linksnumber1, linksnumber2, step };
-            switch (ChoiseType.SelectedIndex)
+            switch (ChoiseType.SelectedIndex)   
             {
                 case 0:
                     foreach (var textBox in textBoxes)
@@ -178,7 +195,6 @@ namespace Gear_Builder_VKR
                         textBox.Enabled = false;
                         ClearTextBoxes();
                     }
-
                     break;
                 case 1:
                     power.Enabled = true;
@@ -233,17 +249,7 @@ namespace Gear_Builder_VKR
             calculateStory.Show();
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label15_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-        }
+      
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
@@ -318,70 +324,8 @@ namespace Gear_Builder_VKR
             GlobalData.Calculations[GlobalData.Calculations.Count - 1].A = Convert.ToDouble(textBox2.Text);
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-        }
 
-        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
-        {
-        }
-
-        private void label14_Click(object sender, EventArgs e)
-        {
-        }
-
-        public Form1()
-        {
-            InitializeComponent();
-            ChoiseType.SelectedIndex = 0;
-
-
-            System.Windows.Forms.TextBox[] textBoxes =
-                { power, frequency1, frequency2, gearratio, torgue, linksnumber1, linksnumber2, step };
-
-            foreach (var textBox in textBoxes)
-            {
-                textBox.Enabled = false;
-            }
-
-            //try
-            //{
-            //    kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5"); // Подключаемся к КОМПАС-3D
-            //    if (kompas != null)
-            //    {
-            //        kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D(); // Получаем интерфейс активной 3D детали
-            //        if (kompas_document_3D != null)
-            //        {
-            //            ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part); // Получаем интерфейс ksPart
-            //            if (kPart != null)
-            //            {
-            //                varcoll = kPart.VariableCollection(); // Получаем массив переменных
-            //                varcoll.refresh(); // Обновляем массив переменных
-            //            }
-            //            else
-            //            {
-            //                MessageBox.Show("Ошибка: Не удалось получить интерфейс ksPart.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("Ошибка: Не удалось получить активный документ 3D.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Ошибка: Не удалось подключиться к КОМПАС-3D.", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //}
-            //catch (COMException ex)
-            //{
-            //    MessageBox.Show($"Приложение КОМПАС-3D не запущено", "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Неизвестная ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-        }
+        
 
         bool firstClick = true;
 
@@ -392,31 +336,7 @@ namespace Gear_Builder_VKR
                 SaveResourcesToFolder(GlobalData.FolderPath);
                 firstClick = false;
             }
-
-
-            //if (GlobalData.FolderPath == null)
-            //{
-            //    using (FolderSelectionForm form = new FolderSelectionForm())
-            //    {
-            //        if (form.ShowDialog() == DialogResult.OK)
-            //        {
-
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("Построение отменено пользователем.");
-            //            return;
-            //        }
-            //    }
-            //}
-
-
             modelRebuilder.RebuildModel(GlobalData.Calculations[GlobalData.Calculations.Count - 1]);
-            //Dictionary<string, double> parametersToUpdate = new Dictionary<string, double>
-            //{
-            //    {"t", 19.05}
-            //};
-            //modelUpdater.UpdateComponentParameters(parametersToUpdate);
         }
 
         private double ConvertValue(System.Windows.Forms.TextBox textBox, CultureInfo ci)
@@ -430,7 +350,6 @@ namespace Gear_Builder_VKR
         {
             if (isActive)
                 return true;
-
             // Использование CultureInfo.InvariantCulture для обработки чисел с точкой как десятичного разделителя
             if (!double.TryParse(textBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double value) ||
                 value <= 0)
@@ -497,19 +416,18 @@ namespace Gear_Builder_VKR
                 return;
             }
 
+            nn = ConvertValue(power, ci);
+            n1 = ConvertValue(frequency1, ci);
+            n2 = ConvertValue(frequency2, ci);
+            u = ConvertValue(gearratio, ci);
+            m = ConvertValue(torgue, ci);
+            z1 = ConvertValue(linksnumber1, ci);
+            z2 = ConvertValue(linksnumber2, ci);
 
-            double nn = ConvertValue(power, ci);
-            double n1 = ConvertValue(frequency1, ci);
-            double n2 = ConvertValue(frequency2, ci);
-            double u = ConvertValue(gearratio, ci);
-            double m = ConvertValue(torgue, ci);
-            double z1 = ConvertValue(linksnumber1, ci);
-            double z2 = ConvertValue(linksnumber2, ci);
-
-            double k1 = conditions.K1;
-            double k2 = conditions.K2;
-            double k3 = conditions.K3;
-            double k4 = conditions.K4;
+            k1 = conditions.K1;
+            k2 = conditions.K2;
+            k3 = conditions.K3;
+            k4 = conditions.K4;
 
             double ke = k1 * k2 * k3 * k4;
 
@@ -524,7 +442,7 @@ namespace Gear_Builder_VKR
                         isGerratioActive) ||
                     !ValidateInput(gearratio, "Передаточное число не может быть отрицательным или нулевым",
                         isGerratioActive)
-                )
+                )   
                 {
                     return;
                 }
@@ -566,15 +484,24 @@ namespace Gear_Builder_VKR
                 }
             }
 
-            double t = 2.8 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
-            double t_fin = chainstep[0];
+            t = 2.8 * Math.Pow(m * ke / (Math.Abs(z1) * p0), 1.0 / 3.0);
+            t_fin = chainstep[0];
             for (int i = 0; i < chainstep.Length; i++)
             {
                 if (chainstep[i] > t)
                 {
                     t_fin = chainstep[i];
-                    break; // Прерываем цикл, так как нашли первое значение больше t
+                    break; 
                 }
+            }
+            double a1;
+            if (currentAngle > 0)
+            {
+                a1 = currentAngle;
+            }
+            else
+            {
+                a1 = 0;
             }
 
             if (currentDistance > 0)
@@ -586,18 +513,7 @@ namespace Gear_Builder_VKR
                 a = 40 + (da1 + da2) / 2;
             }
 
-            double a1;
-            if (currentAngle > 0)
-            {
-                a1 = currentAngle;
-            }
-            else
-            {
-                a1 = 0;
-            }
-
-
-            double La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
+            La = 2 * a / t + (z1 + z2) / 2 + Math.Pow((z2 - z1), 2) / (2 * 3.14) * t / a;
             La = Math.Round(La);
             La -= La % 2 == 1 ? 1 : 0;
 
@@ -693,52 +609,35 @@ namespace Gear_Builder_VKR
             double r21 = d4_ * (0.8 * Math.Cos(deg * beta1) + 1.24 * Math.Cos(deg * y1) - 1.3025) - 0.05;
             double r22 = d4_ * (0.8 * Math.Cos(deg * beta2) + 1.24 * Math.Cos(deg * y2) - 1.3025) - 0.05;
 
-            GlobalData.Calculations.Add(new ChainDriveCalculation
-            {
-                Nn = Math.Round(nn, 2),
-                N1 = Math.Round(n1, 2),
+            GlobalData.Calculations.Add(new ChainDriveCalculation {
+                Nn = Math.Round(nn, 2), 
+                N1 = Math.Round(n1, 2), 
                 N2 = Math.Round(n2, 2),
-
-                M = m,
-                U = u,
-                Z1 = z1,
-                Z2 = z2,
-                T = Math.Round(t, 2),
+                M = m, U = u, Z1 = z1,
+                Z2 = z2, T = Math.Round(t, 2),
                 TFin = t_fin,
-                A = Math.Round(a, 2),
-                Af = Math.Round(af, 2),
-                La = La,
+                A = Math.Round(a, 2), Af = Math.Round(af, 2), La = La, 
                 Da1 = Math.Round(da1, 2),
-                Da2 = Math.Round(da2, 2),
-                D1 = Math.Round(d1, 2),
+                Da2 = Math.Round(da2, 2), D1 = Math.Round(d1, 2), 
                 D2 = Math.Round(d2, 2),
-                A1 = a1,
-                B1 = b1,
-                D1_ = d1_,
-                D4_ = d4_,
-                B7 = b7,
-                H1_ = h1_,
-                D3_ = d3_,
-                Rn = rn,
-
-                Dn1 = Math.Round(dn1, 2),
-                Dn2 = Math.Round(dn2, 2),
+                A1 = a1, B1 = b1, D1_ = d1_,
+                D4_ = d4_, 
+                B7 = b7, 
+                H1_ = h1_, 
+                D3_ = d3_, Rn = rn,
+                Dn1 = Math.Round(dn1, 2), Dn2 = Math.Round(dn2, 2), 
                 R = Math.Round(r, 2),
-                Dvn1 = Math.Round(dvn1, 2),
-                Dvn2 = Math.Round(dvn2, 2),
+                Dvn1 = Math.Round(dvn1, 2), Dvn2 = Math.Round(dvn2, 2), 
                 Alpha1 = Math.Round(alpha1, 2),
-                Alpha2 = Math.Round(alpha2, 2),
-                Fi1 = Math.Round(fi1, 2),
+                Alpha2 = Math.Round(alpha2, 2), Fi1 = Math.Round(fi1, 2), 
                 Fi2 = Math.Round(fi2, 2),
-                Y1 = Math.Round(y1, 2),
-                Y2 = Math.Round(y2, 2),
+                Y1 = Math.Round(y1, 2), Y2 = Math.Round(y2, 2), 
                 Beta1 = Math.Round(beta1, 2),
-                Beta2 = Math.Round(beta2, 2),
-                R11 = Math.Round(r11, 2),
+                Beta2 = Math.Round(beta2, 2), 
+                R11 = Math.Round(r11, 2), 
                 R12 = Math.Round(r12, 2),
-                Fg1 = Math.Round(fg1, 2),
-                Fg2 = Math.Round(fg2, 2),
-                R21 = Math.Round(r21, 2),
+                Fg1 = Math.Round(fg1, 2), Fg2 = Math.Round(fg2, 2), 
+                R21 = Math.Round(r21, 2), 
                 R22 = Math.Round(r22, 2)
             });
 
@@ -752,18 +651,15 @@ namespace Gear_Builder_VKR
 
         private void CheckSave(double t_fin, double n1, double z1, double nn, double Ke, double af)
         {
-            double pressure;
-            double rotation;
-            double sValue;
-            double fpValue;
+            double pressure, rotation, sValue, fpValue, qValue;
 
             pressure = AllowablePressureTable.GetPressure(t_fin, n1);
             rotation = RotationFrequencyTable.GetRotationFrequency(t_fin);
             fpValue = RotationFrequencyTable.GetFpValue(t_fin);
             sValue = RotationFrequencyTable.GetSValue(t_fin);
-            double qValue = RotationFrequencyTable.GetQValue(t_fin);
+            qValue = RotationFrequencyTable.GetQValue(t_fin);
 
-            double V = z1 * n1 * t_fin / 60000; //скорость цепи
+            double V = z1 * n1 * t_fin / 60000; 
             double Ft = nn / V;
 
             double p = pressure * (1 + 0.01 * (z1 - 17));
@@ -783,21 +679,17 @@ namespace Gear_Builder_VKR
                 }
                 else
                 {
-                    // Шаг цепи допустим
                     double nextStep = RotationFrequencyTable.GetNextStep(t_fin, n1);
                     double nextPressure = AllowablePressureTable.GetPressure(nextStep, n1);
                     double nextRotation = RotationFrequencyTable.GetRotationFrequency(nextStep);
 
                     List<double> stepOptions = new List<double> { t_fin, nextStep };
 
-                    // Проверяем возможность использования следующего шага цепи
                     if (n1 <= nextRotation)
                     {
-                        // Открываем новое окно для выбора шага цепи
                         StepSelectionForm stepSelectionForm = new StepSelectionForm(stepOptions, t_fin);
                         stepSelectionForm.ShowDialog();
 
-                        // Получаем выбранный шаг цепи
                         t_fin = stepSelectionForm.SelectedStep;
                         pressure = AllowablePressureTable.GetPressure(t_fin, n1);
                         rotation = RotationFrequencyTable.GetRotationFrequency(t_fin);
@@ -874,7 +766,7 @@ namespace Gear_Builder_VKR
                 B1 = b1;
                 D1 = d1;
                 D4 = d4;
-                D3 = d3; // там везде поставил по 8, потом проверитЬ, как будет выглядеть (это d3_ на моем рисунке) 
+                D3 = d3; 
                 H1 = h1;
                 B7 = b7;
                 Rn = rn;
@@ -893,7 +785,6 @@ namespace Gear_Builder_VKR
                 new ChainStepData(44.45, 25.4, 12.7, 25.4, 18, 38, 57, 172.4),
                 new ChainStepData(50.8, 31.75, 14.27, 28.58, 20, 44, 68, 227),
                 new ChainStepData(63.5, 38.1, 19.84, 39.68, 22, 56, 80, 354),
-                // Добавьте остальные строки аналогичным образом
             };
 
 
@@ -908,8 +799,8 @@ namespace Gear_Builder_VKR
             private static Dictionary<double, (int RotationFrequency, double S, double Fp, double q)> _frequencyTable =
                 new Dictionary<double, (int, double, double, double)>
                 {
-                    { 8.0, (n: 0, S: 11, Fp: 4600, q: 0.2) },
-                    { 9.525, (n: 0, S: 28, Fp: 9100, q: 0.45) },
+                    { 8.0, (1500, 11, 4600, 0.2) },
+                    { 9.525, (1500, 28, 9100, 0.45) },
                     { 12.7, (1250, 39.6, 17854, 0.65) },
                     { 15.875, (1000, 54.8, 22268, 0.8) },
                     { 19.05, (900, 105.8, 31195, 1.5) },
@@ -926,8 +817,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].RotationFrequency;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
             public static double GetSValue(double step)
@@ -936,8 +826,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].S;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
             public static double GetFpValue(double step)
@@ -946,8 +835,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].Fp;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
             public static double GetQValue(double step)
@@ -956,8 +844,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].q;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
 
@@ -971,8 +858,7 @@ namespace Gear_Builder_VKR
                         return steps[i + 1];
                     }
                 }
-
-                return currentStep; // Return the current step if no suitable next step found
+                return currentStep;
             }
         }
 
@@ -982,60 +868,22 @@ namespace Gear_Builder_VKR
             public static Dictionary<int, Dictionary<double, double>> PressureTable =
                 new Dictionary<int, Dictionary<double, double>>
                 {
-                    {
-                        50,
-                        new Dictionary<double, double>
-                        {
-                            { 12.7, 46 }, { 15.875, 43 }, { 19.05, 39 }, { 25.4, 36 }, { 31.75, 34 }, { 38.1, 31 },
-                            { 44.45, 29 }, { 50.8, 27 }
-                        }
-                    },
-                    {
-                        100,
-                        new Dictionary<double, double>
-                        {
-                            { 12.7, 37 }, { 15.875, 34 }, { 19.05, 31 }, { 25.4, 29 }, { 31.75, 27 }, { 38.1, 25 },
-                            { 44.45, 23 }, { 50.8, 22 }
-                        }
-                    },
-                    {
-                        200,
-                        new Dictionary<double, double>
-                        {
-                            { 12.7, 29 }, { 15.875, 27 }, { 19.05, 25 }, { 25.4, 23 }, { 31.75, 22 }, { 38.1, 19 },
-                            { 44.45, 18 }, { 50.8, 17 }
-                        }
-                    },
-                    {
-                        300,
-                        new Dictionary<double, double>
-                        {
-                            { 12.7, 26 }, { 15.875, 24 }, { 19.05, 22 }, { 25.4, 20 }, { 31.75, 19 }, { 38.1, 17 },
-                            { 44.45, 16 }, { 50.8, 15 }
-                        }
-                    },
-                    {
-                        500,
-                        new Dictionary<double, double>
-                        {
-                            { 12.7, 22 }, { 15.875, 20 }, { 19.05, 18 }, { 25.4, 17 }, { 31.75, 16 }, { 38.1, 14 },
-                            { 44.45, 13 }, { 50.8, 12 }
-                        }
-                    },
-                    {
-                        750,
-                        new Dictionary<double, double>
-                            { { 12.7, 19 }, { 15.875, 17 }, { 19.05, 16 }, { 25.4, 15 }, { 31.75, 14 }, { 38.1, 13 } }
-                    },
-                    {
-                        1000,
-                        new Dictionary<double, double>
-                            { { 12.7, 17 }, { 15.875, 16 }, { 19.05, 14 }, { 25.4, 13 }, { 31.75, 13 } }
-                    },
-                    {
-                        1250,
-                        new Dictionary<double, double> { { 12.7, 16 }, { 15.875, 15 }, { 19.05, 13 }, { 25.4, 12 } }
-                    }
+                    { 50, new Dictionary<double, double> { { 12.7, 46 }, { 15.875, 43 }, { 19.05, 39 }, 
+                        { 25.4, 36 }, { 31.75, 34 }, { 38.1, 31 }, { 44.45, 29 }, { 50.8, 27 } } },
+                    { 100, new Dictionary<double, double> { { 12.7, 37 }, { 15.875, 34 }, { 19.05, 31 }, 
+                        { 25.4, 29 }, { 31.75, 27 }, { 38.1, 25 }, { 44.45, 23 }, { 50.8, 22 } } },
+                    { 200, new Dictionary<double, double> { { 12.7, 29 }, { 15.875, 27 }, { 19.05, 25 }, 
+                        { 25.4, 23 }, { 31.75, 22 }, { 38.1, 19 }, { 44.45, 18 }, { 50.8, 17 } } },
+                    { 300, new Dictionary<double, double> { { 12.7, 26 }, { 15.875, 24 }, { 19.05, 22 }, 
+                        { 25.4, 20 }, { 31.75, 19 }, { 38.1, 17 }, { 44.45, 16 }, { 50.8, 15 } } },
+                    { 500, new Dictionary<double, double> { { 12.7, 22 }, { 15.875, 20 }, { 19.05, 18 }, 
+                        { 25.4, 17 }, { 31.75, 16 }, { 38.1, 14 }, { 44.45, 13 }, { 50.8, 12 } } },
+                    { 750, new Dictionary<double, double> { { 12.7, 19 }, { 15.875, 17 }, { 19.05, 16 }, 
+                        { 25.4, 15 }, { 31.75, 14 }, { 38.1, 13 } } },
+                    { 1000, new Dictionary<double, double> { { 12.7, 17 }, { 15.875, 16 }, { 19.05, 14 }, 
+                        { 25.4, 13 }, { 31.75, 13 } } },
+                    { 1250, new Dictionary<double, double> { { 12.7, 16 }, { 15.875, 15 }, { 19.05, 13 }, 
+                        { 25.4, 12 } } }
                 };
 
             // Функция для получения ближайшего допустимого среднего давления
@@ -1045,22 +893,15 @@ namespace Gear_Builder_VKR
                 {
                     try
                     {
-                        // Найти ближайшее большее или равное значение n1 в словаре
                         var closestN1 = PressureTable.Keys.Where(k => k >= n1).OrderBy(k => k).FirstOrDefault();
-
-                        // Если значение n1 меньше минимального значения в таблице, использовать минимальное значение
                         if (closestN1 == 0)
                         {
                             closestN1 = PressureTable.Keys.Min();
                         }
-
-                        // Проверка, существует ли шаг цепи в подтаблице
                         if (PressureTable[closestN1].ContainsKey(step))
                         {
                             return PressureTable[closestN1][step];
                         }
-
-                        throw new ArgumentException("Invalid step value");
                     }
                     catch (ArgumentException ex)
                     {
@@ -1069,7 +910,6 @@ namespace Gear_Builder_VKR
 
                         if (result != DialogResult.Retry)
                         {
-                            // Выход из функции, если пользователь нажал "Отмена"
                             throw;
                         }
                     }
@@ -1082,8 +922,8 @@ namespace Gear_Builder_VKR
             private static Dictionary<double, (int RotationFrequency, double S, double Fp, double q)> _frequencyTable =
                 new Dictionary<double, (int, double, double, double)>
                 {
-                    { 8.0, (n: 0, S: 11, Fp: 4600, q: 0.2) },
-                    { 9.525, (n: 0, S: 28, Fp: 9100, q: 0.45) },
+                    { 8.0, (0, 11, 4600, 0.2) },
+                    { 9.525, (0, 28, 9100, 0.45) },
                     { 12.7, (1250, 39.6, 17854, 0.65) },
                     { 15.875, (1000, 54.8, 22268, 0.8) },
                     { 19.05, (900, 105.8, 31195, 1.5) },
@@ -1100,8 +940,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].RotationFrequency;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
             public static double GetSValue(double step)
@@ -1110,8 +949,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].S;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
             public static double GetFpValue(double step)
@@ -1120,8 +958,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].Fp;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
             public static double GetQValue(double step)
@@ -1130,8 +967,7 @@ namespace Gear_Builder_VKR
                 {
                     return _frequencyTable[step].q;
                 }
-
-                throw new ArgumentException("Invalid step value");
+                throw new ArgumentException("Не найдено искомое значение");
             }
 
 
@@ -1145,8 +981,7 @@ namespace Gear_Builder_VKR
                         return steps[i + 1];
                     }
                 }
-
-                return currentStep; // Return the current step if no suitable next step found
+                return currentStep; 
             }
         }
     }

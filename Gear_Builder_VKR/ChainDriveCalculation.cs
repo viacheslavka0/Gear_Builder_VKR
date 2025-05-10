@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Newtonsoft.Json;
+
+using System.IO;
+
 
 namespace Gear_Builder_VKR
 {
@@ -14,6 +18,21 @@ namespace Gear_Builder_VKR
     {
         public static List<ChainDriveCalculation> Calculations = new List<ChainDriveCalculation>();
         public static string FolderPath { get; set; }
+
+        public static void SaveCalculationsToFile(string filePath)
+        {
+            var json = JsonConvert.SerializeObject(Calculations, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText(filePath, json);
+        }   
+
+        public static void LoadCalculationsFromFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                Calculations = JsonConvert.DeserializeObject<List<ChainDriveCalculation>>(json);
+            }
+        }
     }
     public class ChainDriveCalculation
     {
@@ -34,8 +53,6 @@ namespace Gear_Builder_VKR
         public double D1 { get; set; }
         public double D2 { get; set; }
         public double A1 { get; set; }
-
-        //ниже - для геометрических характеристик частей звена
         public double D1_ { get; set; }
         public double B1 { get; set; }
         public double D4_ { get; set; }
@@ -43,7 +60,6 @@ namespace Gear_Builder_VKR
         public double H1_ { get; set; }
         public double D3_ { get; set; }
         public double Rn { get; set; }
-
         //параметры для звездочек
         public double Dn1 { get; set; }
         public double R { get; set; }
@@ -83,17 +99,12 @@ namespace Gear_Builder_VKR
     }
     public class ModelRebuilder
     {
-        //Чтобы обработать ситуации, когда переменная не существует в сборке, и избежать ошибок при попытке установить ссылку на несуществующий параметр, вы можете добавить проверку на null для каждой переменной перед тем, как вызывать метод SetLink. Это гарантирует, что ссылка будет установлена только если переменная действительно существует в вашем документе. Вот как можно модифицировать ваш код:
+        
         void SetVariableLink(ksVariable variable, string assemblyPath, string paramName)
         {
             if (variable != null)
             {
                 variable.SetLink(assemblyPath, paramName);
-            }
-            else
-            {
-                // Логирование или вывод сообщения, что переменная не найдена (по желанию)
-                System.Diagnostics.Debug.WriteLine($"Variable {paramName} not found.");
             }
         }
         private void ProcessPart(string partName, string assemblyPath)
@@ -102,35 +113,9 @@ namespace Gear_Builder_VKR
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.Document3D();
             kompas_document_3D.Open($"{GlobalData.FolderPath}//{partName}.m3d");
 
-
             kompas.ActiveDocument3D();
             ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
             ksVariableCollection varcoll = kPart.VariableCollection();
-
-
-
-
-            //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
-
-            //IDocuments documents = (IDocuments)application.Documents;
-            //var document = documents.Open($"{GlobalData.FolderPath}//{partName}.m3d",false);
-            //if (document == null)
-            //{
-            //    MessageBox.Show($"Не удалось открыть файл: {partName}.m3d", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
-
-
-
-            //ksVariable t = varcoll.GetByName("t");
-            //ksVariable d4_ =varcoll.GetByName("d4_");
-            //ksVariable d2_ =varcoll.GetByName("d2_");
-            //ksVariable d1_ =varcoll.GetByName("d1_");
-            //ksVariable h1_ =varcoll.GetByName("h1_");
-            //ksVariable d3_ =varcoll.GetByName("d3_");
-            //ksVariable b1_ =varcoll.GetByName("b1_");
-            //ksVariable b7_ =varcoll.GetByName("b7_");
-
 
             SetVariableLink(varcoll.GetByName("t"), assemblyPath, "t");
             SetVariableLink(varcoll.GetByName("d4_"), assemblyPath, "d4_");
@@ -156,8 +141,6 @@ namespace Gear_Builder_VKR
             ksPart kPart = kompas_document_3D.GetPart((int)Part_Type.pTop_Part);
             ksVariableCollection varcoll = kPart.VariableCollection();
 
-
-
             if (partName == "Ведущая звездочка")
             {
                 SetVariable(varcoll, "d_d", calculation.D1);
@@ -174,7 +157,7 @@ namespace Gear_Builder_VKR
             }
             else
             {
-                SetVariable(varcoll, "d_d", calculation.D2);
+                SetVariable(varcoll, "d_d", calculation.D2);     
                 SetVariable(varcoll, "d_n", calculation.Dn2);
                 SetVariable(varcoll, "d_vp", calculation.Dvn2);
                 SetVariable(varcoll, "alpha", calculation.Alpha2);
@@ -192,6 +175,7 @@ namespace Gear_Builder_VKR
             kompas_document_3D.Save();
             kompas_document_3D.close();
         }
+
         private void GearBuild(string assemblyPath, ChainDriveCalculation calculation)
         {
             KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
@@ -219,7 +203,6 @@ namespace Gear_Builder_VKR
             SetVariable(varcoll, "da1", calculation.Da1);
             SetVariable(varcoll, "da2", calculation.Da2);
             SetVariable(varcoll, "a1", calculation.A1);
-
             SetVariable(varcoll, "d1_", calculation.D1_);
             SetVariable(varcoll, "b1", calculation.B1);
             SetVariable(varcoll, "d4_", calculation.D4_);
@@ -235,7 +218,6 @@ namespace Gear_Builder_VKR
         public static bool isFirstClick = true;
         public void RebuildModel(ChainDriveCalculation calculation)
         {
-
             KompasObject kompas;
             try
             {
@@ -246,17 +228,11 @@ namespace Gear_Builder_VKR
             kompas.Visible = true;
 
             ksDocument3D kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
-
             while (kompas_document_3D != null)
             {
                 kompas_document_3D.close();
                 kompas_document_3D = (ksDocument3D)kompas.ActiveDocument3D();
             }
-
-
-            //IApplication application = (IApplication)Marshal.GetActiveObject("KOMPAS.Application.7");
-            //IDocuments documents = (IDocuments)application.Documents;
-
             string assemblyPath = $"{GlobalData.FolderPath}\\Параметрическая цепь 19,05.a3d";
             if (kompas_document_3D == null && isFirstClick)
             {
@@ -267,17 +243,8 @@ namespace Gear_Builder_VKR
             }
             StarBuild("Ведущая звездочка", assemblyPath, calculation);
             StarBuild("Ведомая звездочка", assemblyPath, calculation);
+
             GearBuild(assemblyPath, calculation);
-
-            //try
-            //{
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Ошибка при открытии файла сборки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    SelectFolderAndRetry();
-            //}
         }
 
 

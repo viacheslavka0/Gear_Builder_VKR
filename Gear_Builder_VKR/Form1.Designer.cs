@@ -96,10 +96,6 @@
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // folderBrowserDialog1
-            // 
-            this.folderBrowserDialog1.HelpRequest += new System.EventHandler(this.folderBrowserDialog1_HelpRequest);
-            // 
             // label16
             // 
             this.label16.AutoSize = true;
@@ -171,7 +167,6 @@
             this.a_label.Name = "a_label";
             this.a_label.Size = new System.Drawing.Size(16, 17);
             this.a_label.TabIndex = 1;
-            this.a_label.Click += new System.EventHandler(this.label14_Click);
             // 
             // label12
             // 
@@ -199,7 +194,6 @@
             this.af_label.Name = "af_label";
             this.af_label.Size = new System.Drawing.Size(20, 17);
             this.af_label.TabIndex = 1;
-            this.af_label.Click += new System.EventHandler(this.label14_Click);
             // 
             // L_label
             // 
@@ -209,7 +203,6 @@
             this.L_label.Name = "L_label";
             this.L_label.Size = new System.Drawing.Size(16, 17);
             this.L_label.TabIndex = 1;
-            this.L_label.Click += new System.EventHandler(this.label14_Click);
             // 
             // label18
             // 
@@ -287,7 +280,6 @@
             this.ChoiseType.Name = "ChoiseType";
             this.ChoiseType.Size = new System.Drawing.Size(544, 21);
             this.ChoiseType.TabIndex = 0;
-            this.ChoiseType.DropDown += new System.EventHandler(this.ChoiseType_DropDown);
             this.ChoiseType.SelectedIndexChanged += new System.EventHandler(this.ChoiseType_SelectedIndexChanged);
             // 
             // tableLayoutPanel1
@@ -296,7 +288,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85.85859F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 116F));
             this.tableLayoutPanel1.Controls.Add(this.label26, 1, 7);
             this.tableLayoutPanel1.Controls.Add(this.label29, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.label28, 1, 5);
@@ -334,16 +326,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(544, 259);
             this.tableLayoutPanel1.TabIndex = 13;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+
             // 
             // label26
             // 
             this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label26.AutoSize = true;
             this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label26.Location = new System.Drawing.Point(373, 233);
+            this.label26.Location = new System.Drawing.Point(366, 233);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(53, 16);
+            this.label26.Size = new System.Drawing.Size(52, 16);
             this.label26.TabIndex = 14;
             this.label26.Text = "t";
             // 
@@ -352,9 +344,9 @@
             this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label29.AutoSize = true;
             this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label29.Location = new System.Drawing.Point(373, 201);
+            this.label29.Location = new System.Drawing.Point(366, 201);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(53, 16);
+            this.label29.Size = new System.Drawing.Size(52, 16);
             this.label29.TabIndex = 15;
             this.label29.Text = "z2";
             // 
@@ -363,9 +355,9 @@
             this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label28.Location = new System.Drawing.Point(373, 169);
+            this.label28.Location = new System.Drawing.Point(366, 169);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(53, 16);
+            this.label28.Size = new System.Drawing.Size(52, 16);
             this.label28.TabIndex = 16;
             this.label28.Text = "z1";
             // 
@@ -375,7 +367,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(6, 233);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(358, 17);
+            this.label9.Size = new System.Drawing.Size(351, 17);
             this.label9.TabIndex = 7;
             this.label9.Text = "Шаг цепи";
             // 
@@ -384,9 +376,9 @@
             this.label27.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label27.Location = new System.Drawing.Point(373, 137);
+            this.label27.Location = new System.Drawing.Point(366, 137);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(53, 16);
+            this.label27.Size = new System.Drawing.Size(52, 16);
             this.label27.TabIndex = 15;
             this.label27.Text = "T";
             // 
@@ -396,16 +388,16 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(358, 17);
+            this.label1.Size = new System.Drawing.Size(351, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Передаваемая мощность, кВт";
             // 
             // linksnumber2
             // 
             this.linksnumber2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.linksnumber2.Location = new System.Drawing.Point(435, 198);
+            this.linksnumber2.Location = new System.Drawing.Point(427, 198);
             this.linksnumber2.Name = "linksnumber2";
-            this.linksnumber2.Size = new System.Drawing.Size(103, 23);
+            this.linksnumber2.Size = new System.Drawing.Size(111, 23);
             this.linksnumber2.TabIndex = 7;
             // 
             // label23
@@ -413,9 +405,9 @@
             this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label23.Location = new System.Drawing.Point(373, 41);
+            this.label23.Location = new System.Drawing.Point(366, 41);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(53, 16);
+            this.label23.Size = new System.Drawing.Size(52, 16);
             this.label23.TabIndex = 10;
             this.label23.Text = "n1";
             // 
@@ -425,16 +417,16 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 41);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(358, 17);
+            this.label2.Size = new System.Drawing.Size(351, 17);
             this.label2.TabIndex = 0;
             this.label2.Text = "Частота вращения ведущей звездочки, об/мин";
             // 
             // linksnumber1
             // 
             this.linksnumber1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.linksnumber1.Location = new System.Drawing.Point(435, 166);
+            this.linksnumber1.Location = new System.Drawing.Point(427, 166);
             this.linksnumber1.Name = "linksnumber1";
-            this.linksnumber1.Size = new System.Drawing.Size(103, 23);
+            this.linksnumber1.Size = new System.Drawing.Size(111, 23);
             this.linksnumber1.TabIndex = 6;
             // 
             // label25
@@ -442,9 +434,9 @@
             this.label25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label25.Location = new System.Drawing.Point(373, 105);
+            this.label25.Location = new System.Drawing.Point(366, 105);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(53, 16);
+            this.label25.Size = new System.Drawing.Size(52, 16);
             this.label25.TabIndex = 12;
             this.label25.Text = "U";
             // 
@@ -454,7 +446,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 73);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(358, 17);
+            this.label4.Size = new System.Drawing.Size(351, 17);
             this.label4.TabIndex = 0;
             this.label4.Text = "Частота вращения ведомой звездочки, об/мин";
             // 
@@ -464,16 +456,16 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(6, 201);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(358, 17);
+            this.label7.Size = new System.Drawing.Size(351, 17);
             this.label7.TabIndex = 4;
             this.label7.Text = "Число звеньев ведомой звездочки";
             // 
             // gearratio
             // 
             this.gearratio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.gearratio.Location = new System.Drawing.Point(435, 102);
+            this.gearratio.Location = new System.Drawing.Point(427, 102);
             this.gearratio.Name = "gearratio";
-            this.gearratio.Size = new System.Drawing.Size(103, 23);
+            this.gearratio.Size = new System.Drawing.Size(111, 23);
             this.gearratio.TabIndex = 4;
             // 
             // label3
@@ -482,24 +474,24 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 105);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(358, 17);
+            this.label3.Size = new System.Drawing.Size(351, 17);
             this.label3.TabIndex = 0;
             this.label3.Text = "Передаточное число";
             // 
             // frequency2
             // 
             this.frequency2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.frequency2.Location = new System.Drawing.Point(435, 70);
+            this.frequency2.Location = new System.Drawing.Point(427, 70);
             this.frequency2.Name = "frequency2";
-            this.frequency2.Size = new System.Drawing.Size(103, 23);
+            this.frequency2.Size = new System.Drawing.Size(111, 23);
             this.frequency2.TabIndex = 3;
             // 
             // step
             // 
             this.step.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.step.Location = new System.Drawing.Point(435, 230);
+            this.step.Location = new System.Drawing.Point(427, 230);
             this.step.Name = "step";
-            this.step.Size = new System.Drawing.Size(103, 23);
+            this.step.Size = new System.Drawing.Size(111, 23);
             this.step.TabIndex = 8;
             // 
             // label6
@@ -508,33 +500,33 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 169);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(358, 17);
+            this.label6.Size = new System.Drawing.Size(351, 17);
             this.label6.TabIndex = 2;
             this.label6.Text = "Число звеньев ведущей звездочки";
             // 
             // frequency1
             // 
             this.frequency1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.frequency1.Location = new System.Drawing.Point(435, 38);
+            this.frequency1.Location = new System.Drawing.Point(427, 38);
             this.frequency1.Name = "frequency1";
-            this.frequency1.Size = new System.Drawing.Size(103, 23);
+            this.frequency1.Size = new System.Drawing.Size(111, 23);
             this.frequency1.TabIndex = 2;
             // 
             // torgue
             // 
             this.torgue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.torgue.Location = new System.Drawing.Point(435, 134);
+            this.torgue.Location = new System.Drawing.Point(427, 134);
             this.torgue.Name = "torgue";
-            this.torgue.Size = new System.Drawing.Size(103, 23);
+            this.torgue.Size = new System.Drawing.Size(111, 23);
             this.torgue.TabIndex = 5;
             // 
             // power
             // 
             this.power.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.power.BackColor = System.Drawing.SystemColors.Window;
-            this.power.Location = new System.Drawing.Point(435, 6);
+            this.power.Location = new System.Drawing.Point(427, 6);
             this.power.Name = "power";
-            this.power.Size = new System.Drawing.Size(103, 23);
+            this.power.Size = new System.Drawing.Size(111, 23);
             this.power.TabIndex = 1;
             // 
             // label15
@@ -542,9 +534,9 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label15.Location = new System.Drawing.Point(373, 9);
+            this.label15.Location = new System.Drawing.Point(366, 9);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(53, 16);
+            this.label15.Size = new System.Drawing.Size(52, 16);
             this.label15.TabIndex = 9;
             this.label15.Text = "P";
             // 
@@ -553,9 +545,9 @@
             this.label24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label24.Location = new System.Drawing.Point(373, 73);
+            this.label24.Location = new System.Drawing.Point(366, 73);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(53, 16);
+            this.label24.Size = new System.Drawing.Size(52, 16);
             this.label24.TabIndex = 11;
             this.label24.Text = "n2";
             // 
@@ -565,7 +557,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 137);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(358, 17);
+            this.label5.Size = new System.Drawing.Size(351, 17);
             this.label5.TabIndex = 2;
             this.label5.Text = "Крутящий момент, Н*мм";
             // 
@@ -583,7 +575,6 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Исходные данные";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // label19
             // 
@@ -687,7 +678,7 @@
             this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 84.49438F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.50562F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 116F));
             this.tableLayoutPanel2.Controls.Add(this.label22, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.textBox2, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.label20, 1, 0);
@@ -710,7 +701,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(435, 6);
+            this.textBox2.Location = new System.Drawing.Point(427, 6);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(95, 23);
             this.textBox2.TabIndex = 11;
@@ -721,9 +712,9 @@
             this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label20.Location = new System.Drawing.Point(367, 9);
+            this.label20.Location = new System.Drawing.Point(360, 9);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(59, 16);
+            this.label20.Size = new System.Drawing.Size(58, 16);
             this.label20.TabIndex = 13;
             this.label20.Text = " ";
             // 

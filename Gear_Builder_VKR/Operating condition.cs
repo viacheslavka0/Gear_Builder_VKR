@@ -76,8 +76,6 @@ public class OperationConditions
     public void CalculateCoefficients(string oil, string preassure, string mode, string tension)
     {
 
-        // Здесь будет логика расчёта коэффициентов
-        // Например:
         switch (oil)
         {
             case "Непрерывный (в маслянной ванне или от насоса)":
